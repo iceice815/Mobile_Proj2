@@ -49,7 +49,6 @@ public class Register extends AppCompatActivity {
 
         sign_up = (Button)findViewById(R.id.Sign_up);
         sign_up_cancel = (Button)findViewById(R.id.Sing_up_cancel);
-        mProgressBar = (ProgressBar)findViewById(R.id.ProgressBar);
         mUsername = (EditText)findViewById(R.id.Username);
         mPassword = (EditText)findViewById(R.id.Password);
         mConfirm_password = (EditText)findViewById(R.id.Confirm_password);
@@ -61,7 +60,7 @@ public class Register extends AppCompatActivity {
             // Mobile Service URL and key
             mClient = new MobileServiceClient(
                     "https://fitnessrunning.azurewebsites.net",
-                    this).withFilter(new ProgressFilter());
+                    this);
 
             // Extend timeout from default of 10s to 20s
             mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {
@@ -106,6 +105,7 @@ public class Register extends AppCompatActivity {
      * add user to userinfo table
      */
     private void add_user(){
+        mProgressBar = (ProgressBar)findViewById(R.id.ProgressBar);
         mProgressBar.setVisibility(ProgressBar.VISIBLE);
         if(mClient == null){
             return;
@@ -147,47 +147,7 @@ public class Register extends AppCompatActivity {
      ********************************you can ignore it********************************
      * *******************************************************************************
      */
-    private class ProgressFilter implements ServiceFilter {
 
-        @Override
-        public ListenableFuture<ServiceFilterResponse> handleRequest(ServiceFilterRequest request, NextServiceFilterCallback nextServiceFilterCallback) {
-
-            final SettableFuture<ServiceFilterResponse> resultFuture = SettableFuture.create();
-
-
-            runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (mProgressBar != null) mProgressBar.setVisibility(ProgressBar.VISIBLE);
-                }
-            });
-
-            ListenableFuture<ServiceFilterResponse> future = nextServiceFilterCallback.onNext(request);
-
-            Futures.addCallback(future, new FutureCallback<ServiceFilterResponse>() {
-                @Override
-                public void onFailure(Throwable e) {
-                    resultFuture.setException(e);
-                }
-
-                @Override
-                public void onSuccess(ServiceFilterResponse response) {
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            if (mProgressBar != null) mProgressBar.setVisibility(ProgressBar.GONE);
-                        }
-                    });
-
-                    resultFuture.set(response);
-                }
-            });
-
-            return resultFuture;
-        }
-    }
     /**
      * Creates a dialog and shows it
      *
