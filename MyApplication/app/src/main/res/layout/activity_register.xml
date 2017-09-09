@@ -1,9 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="proj2.mobile.melbourne.fitnessrunning.Register">
+    android:id="@+id/Signup">
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="username"
+        android:ems="20"
+        android:id="@+id/Username"
+        android:layout_above="@+id/Password"
+        android:layout_alignLeft="@+id/Password"
+        android:layout_alignStart="@+id/Password" />
 
-</android.support.constraint.ConstraintLayout>
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="20"
+        android:inputType="textPassword"
+        android:id="@+id/Password"
+        android:hint="password"
+        android:layout_above="@+id/Confirm_password"
+        android:layout_centerHorizontal="true" />
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:id="@+id/RelativeLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="100dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/Sing_up_cancel"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"
+            android:id="@+id/Sign_up"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="25dp" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="20"
+        android:id="@+id/Confirm_password"
+        android:hint="confirm password"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/Password"
+        android:layout_alignStart="@+id/Password" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ProgressBar"
+        android:layout_below="@+id/RelativeLayout"
+        android:indeterminate="false"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

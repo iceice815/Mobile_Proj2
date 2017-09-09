@@ -25,7 +25,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     compile 'com.microsoft.azure:azure-mobile-android:3.2.0@aar'
