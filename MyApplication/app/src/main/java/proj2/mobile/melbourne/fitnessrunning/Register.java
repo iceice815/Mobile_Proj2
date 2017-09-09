@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -113,11 +114,19 @@ public class Register extends AppCompatActivity {
         userInfo.setmUsername(mUsername.getText().toString());
         userInfo.setmPassword(mPassword.getText().toString());
         if(mConfirm_password.getText().toString().equals(mPassword.getText().toString())) {
+            Log.d("Debug","AsyncJob");
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
                     try {
                         mUserTable.insert(userInfo).get();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent backto_login = new Intent(getApplicationContext(), Login.class);
+                                startActivity(backto_login);
+                            }
+                        });
                     } catch (Exception e) {
                         createAndShowDialog(e, "Error");
                     }
