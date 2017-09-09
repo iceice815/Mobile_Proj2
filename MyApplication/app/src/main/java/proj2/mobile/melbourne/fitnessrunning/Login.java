@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity {
         try {
             mClient = new MobileServiceClient("https://fitnessrunning.azurewebsites.net", this);
 
-            mToDoTable = mClient.getTable(UserInfo.class);
+//            mToDoTable = mClient.getTable(UserInfo.class);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
