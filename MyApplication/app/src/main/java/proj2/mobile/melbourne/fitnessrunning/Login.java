@@ -1,6 +1,7 @@
 package proj2.mobile.melbourne.fitnessrunning;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,10 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 
 import java.net.MalformedURLException;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.*;
 
 public class Login extends AppCompatActivity {
     private Button register;
@@ -20,7 +25,7 @@ public class Login extends AppCompatActivity {
     private EditText PassWord;
 
     private MobileServiceClient mClient;
-    private MobileServiceTable<UserInfo> mToDoTable;
+    private MobileServiceTable<UserInfo> mUserInfoTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +43,13 @@ public class Login extends AppCompatActivity {
         try {
             mClient = new MobileServiceClient("https://fitnessrunning.azurewebsites.net", this);
 
-//            mToDoTable = mClient.getTable(UserInfo.class);
+            mUserInfoTable = mClient.getTable(UserInfo.class);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+//        mToDoTable = mClient.getTable(UserInfo.class);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,15 +62,75 @@ public class Login extends AppCompatActivity {
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginJudgement();
+                try {
+                    LoginJudgement();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
     }
 //获取两个edit的内容，然后获取table的内容进行比对，如果是true就跳转
-    public void LoginJudgement(){
+    public void LoginJudgement() throws ExecutionException, InterruptedException {
 
+        final String Username = UserName.getText().toString();
+        final String Password = PassWord.getText().toString();
+
+//        final List<UserInfo> results = mUserInfoTable.where().field("username").eq(val(Username)).execute().get();
+
+//        List<UserInfo> results = refreshItemsFromMobileServiceTable();
+        new AsyncTask<Void, Void, Void>(){
+
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                Log.w("aaa","ABC");
+
+                try {
+                    final List<UserInfo> results = refreshItemsFromMobileServiceTable(Username);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(UserInfo info :results)
+                            {
+
+                                if (info.getmPassword().equals(Password)) {
+                                    Log.w("aaa", "fuch adel");
+                                    Intent intent1 = new Intent(Login.this, Operation.class);
+                                    startActivity(intent1);
+                                } else {
+                                    Log.w("adel", "fuch you");
+//                                    Intent intent1 = new Intent(Login.this, Operation.class);
+//                                    startActivity(intent1);
+                                }
+                            }
+
+                        }
+                    });
+
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
 
 
     }
+
+    private List<UserInfo> refreshItemsFromMobileServiceTable(String Username) throws ExecutionException, InterruptedException {
+        Log.i("afc","kfc");
+
+        return mUserInfoTable.where().field("username").
+                eq(val(Username)).execute().get();            //将所有field值为complete的记录返回出来
+//        return mUserInfoTable
+    }
+
+
 }

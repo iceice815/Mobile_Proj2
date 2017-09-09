@@ -115,6 +115,7 @@ public class Register extends AppCompatActivity {
         userInfo.setmPassword(mPassword.getText().toString());
         if(mConfirm_password.getText().toString().equals(mPassword.getText().toString())) {
             Log.d("Debug","AsyncJob");
+
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
