@@ -79,15 +79,11 @@ public class Login extends AppCompatActivity {
         final String Username = UserName.getText().toString();
         final String Password = PassWord.getText().toString();
 
-//        final List<UserInfo> results = mUserInfoTable.where().field("username").eq(val(Username)).execute().get();
-
-//        List<UserInfo> results = refreshItemsFromMobileServiceTable();
         new AsyncTask<Void, Void, Void>(){
 
 
             @Override
             protected Void doInBackground(Void... params) {
-                Log.w("aaa","ABC");
 
                 try {
                     final List<UserInfo> results = refreshItemsFromMobileServiceTable(Username);
@@ -99,11 +95,9 @@ public class Login extends AppCompatActivity {
                             {
 
                                 if (info.getmPassword().equals(Password)) {
-                                    Log.w("aaa", "fuch adel");
                                     Intent intent1 = new Intent(Login.this, Operation.class);
                                     startActivity(intent1);
                                 } else {
-                                    Log.w("adel", "fuch you");
 //                                    Intent intent1 = new Intent(Login.this, Operation.class);
 //                                    startActivity(intent1);
                                 }
@@ -125,11 +119,9 @@ public class Login extends AppCompatActivity {
     }
 
     private List<UserInfo> refreshItemsFromMobileServiceTable(String Username) throws ExecutionException, InterruptedException {
-        Log.i("afc","kfc");
 
         return mUserInfoTable.where().field("username").
                 eq(val(Username)).execute().get();            //将所有field值为complete的记录返回出来
-//        return mUserInfoTable
     }
 
 
