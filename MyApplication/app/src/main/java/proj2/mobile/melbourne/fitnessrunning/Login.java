@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,9 +19,9 @@ import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperati
 
 public class Login extends AppCompatActivity {
     private Button register;
-    private Button Login;
-    private EditText UserName;
-    private EditText PassWord;
+    private Button login;
+    private EditText username;
+    private EditText password;
 
     private MobileServiceClient mClient;
     private MobileServiceTable<UserInfo> mUserInfoTable;
@@ -32,38 +31,39 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Login = (Button) findViewById(R.id.LogInButton);
+        login = (Button) findViewById(R.id.LogInButton);
 
         register = (Button) findViewById(R.id.RegisterButton);
 
-        UserName = (EditText) findViewById(R.id.UserName);
+        username = (EditText) findViewById(R.id.UserName);
 
-        PassWord = (EditText) findViewById(R.id.Password);
+        password = (EditText) findViewById(R.id.Password);
 
         try {
+            //get a client of the referred database
             mClient = new MobileServiceClient("https://fitnessrunning.azurewebsites.net", this);
-
+            //get the table of the database
             mUserInfoTable = mClient.getTable(UserInfo.class);
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
-//        mToDoTable = mClient.getTable(UserInfo.class);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //if the user click register button, then transfer to the register interface
                 Intent intent = new Intent(Login.this, Register.class);
                 startActivity(intent);
             }
         });
 
-        Login.setOnClickListener(new View.OnClickListener() {
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    LoginJudgement();
+                    //judge if the username and password are correct
+                    login_judgement();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -73,36 +73,34 @@ public class Login extends AppCompatActivity {
         });
 
     }
-//获取两个edit的内容，然后获取table的内容进行比对，如果是true就跳转
-    public void LoginJudgement() throws ExecutionException, InterruptedException {
 
-        final String Username = UserName.getText().toString();
-        final String Password = PassWord.getText().toString();
+    public void login_judgement() throws ExecutionException, InterruptedException {
+
+        final String Username = username.getText().toString();
+        final String Password = password.getText().toString();
 
         new AsyncTask<Void, Void, Void>(){
 
-
             @Override
             protected Void doInBackground(Void... params) {
-
                 try {
-                    final List<UserInfo> results = refreshItemsFromMobileServiceTable(Username);
+                    //get all items which has a same username with the user input value
+                    final List<UserInfo> results = get_items_from_table(Username);
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             for(UserInfo info :results)
                             {
-
                                 if (info.getmPassword().equals(Password)) {
+                                    //if the password is correct, then transfer to the operation interface
                                     Intent intent1 = new Intent(Login.this, Operation.class);
                                     startActivity(intent1);
                                 } else {
-//                                    Intent intent1 = new Intent(Login.this, Operation.class);
-//                                    startActivity(intent1);
+                                    username.setText("");
+                                    password.setText("");
                                 }
                             }
-
                         }
                     });
 
@@ -118,10 +116,10 @@ public class Login extends AppCompatActivity {
 
     }
 
-    private List<UserInfo> refreshItemsFromMobileServiceTable(String Username) throws ExecutionException, InterruptedException {
-
+    private List<UserInfo> get_items_from_table(String Username) throws ExecutionException, InterruptedException {
+        //return a item list which has the same username with the user input
         return mUserInfoTable.where().field("username").
-                eq(val(Username)).execute().get();            //将所有field值为complete的记录返回出来
+                eq(val(Username)).execute().get();
     }
 
 
