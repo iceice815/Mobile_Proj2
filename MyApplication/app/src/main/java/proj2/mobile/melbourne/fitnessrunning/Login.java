@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
@@ -22,6 +23,7 @@ public class Login extends AppCompatActivity {
     private Button login;
     private EditText username;
     private EditText password;
+    private ProgressBar mProgressBar;
 
     private MobileServiceClient mClient;
     private MobileServiceTable<UserInfo> mUserInfoTable;
@@ -39,6 +41,8 @@ public class Login extends AppCompatActivity {
 
         password = (EditText) findViewById(R.id.Password);
 
+        mProgressBar = (ProgressBar) findViewById(R.id.LoginProgressBar);
+
         try {
             //get a client of the referred database
             mClient = new MobileServiceClient("https://fitnessrunning.azurewebsites.net", this);
@@ -55,6 +59,7 @@ public class Login extends AppCompatActivity {
                 //if the user click register button, then transfer to the register interface
                 Intent intent = new Intent(Login.this, Register.class);
                 startActivity(intent);
+
             }
         });
 
@@ -75,6 +80,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void login_judgement() throws ExecutionException, InterruptedException {
+        mProgressBar.setVisibility(ProgressBar.VISIBLE);
 
         final String Username = username.getText().toString();
         final String Password = password.getText().toString();
@@ -96,6 +102,7 @@ public class Login extends AppCompatActivity {
                                     //if the password is correct, then transfer to the operation interface
                                     Intent intent1 = new Intent(Login.this, Operation.class);
                                     startActivity(intent1);
+                                    finish();
                                 } else {
                                     username.setText("");
                                     password.setText("");

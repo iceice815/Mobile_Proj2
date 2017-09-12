@@ -59,6 +59,16 @@
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/LoginProgressBar"
+        android:layout_below="@+id/RelativeLayout"
+        android:indeterminate="false"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true" />
+
 
 
 </RelativeLayout>
