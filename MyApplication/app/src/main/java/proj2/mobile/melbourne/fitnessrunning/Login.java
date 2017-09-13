@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
@@ -18,10 +19,11 @@ import java.util.concurrent.ExecutionException;
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.*;
 
 public class Login extends AppCompatActivity {
-    private Button register;
-    private Button login;
-    private EditText username;
-    private EditText password;
+    private Button mRegister;
+    private Button mLogin;
+    private EditText mUsername;
+    private EditText mPassword;
+    private ProgressBar mProgressBar;
 
     private MobileServiceClient mClient;
     private MobileServiceTable<UserInfo> mUserInfoTable;
@@ -31,13 +33,15 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        login = (Button) findViewById(R.id.LogInButton);
+        mLogin = (Button) findViewById(R.id.LogInButton);
 
-        register = (Button) findViewById(R.id.RegisterButton);
+        mRegister = (Button) findViewById(R.id.RegisterButton);
 
-        username = (EditText) findViewById(R.id.UserName);
+        mUsername = (EditText) findViewById(R.id.UserName);
 
-        password = (EditText) findViewById(R.id.Password);
+        mPassword = (EditText) findViewById(R.id.Password);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.LoginProgressBar);
 
         try {
             //get a client of the referred database
@@ -49,16 +53,17 @@ public class Login extends AppCompatActivity {
         }
 
 
-        register.setOnClickListener(new View.OnClickListener() {
+        mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //if the user click register button, then transfer to the register interface
                 Intent intent = new Intent(Login.this, Register.class);
                 startActivity(intent);
+
             }
         });
 
-        login.setOnClickListener(new View.OnClickListener() {
+        mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -75,9 +80,10 @@ public class Login extends AppCompatActivity {
     }
 
     public void login_judgement() throws ExecutionException, InterruptedException {
+        mProgressBar.setVisibility(ProgressBar.VISIBLE);
 
-        final String Username = username.getText().toString();
-        final String Password = password.getText().toString();
+        final String username = mUsername.getText().toString();
+        final String password = mPassword.getText().toString();
 
         new AsyncTask<Void, Void, Void>(){
 
@@ -85,23 +91,27 @@ public class Login extends AppCompatActivity {
             protected Void doInBackground(Void... params) {
                 try {
                     //get all items which has a same username with the user input value
-                    final List<UserInfo> results = get_items_from_table(Username);
+                    final List<UserInfo> results = get_items_from_table(username);
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             for(UserInfo info :results)
                             {
-                                if (info.getmPassword().equals(Password)) {
+                                if (info.getmPassword().equals(password)) {
                                     //if the password is correct, then transfer to the operation interface
                                     Intent intent1 = new Intent(Login.this, RunningTrack.class);
                                     intent1.putExtra("username",Username);
                                     startActivity(intent1);
+<<<<<<< HEAD
 
 
+=======
+                                    finish();
+>>>>>>> 0913
                                 } else {
-                                    username.setText("");
-                                    password.setText("");
+                                    mUsername.setText("");
+                                    mPassword.setText("");
                                 }
                             }
                             finish();
