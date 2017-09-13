@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "294669012575",
+    "project_id": "firebase-fitnessrunning"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294669012575:android:561a083005d5af1f",
+        "android_client_info": {
+          "package_name": "proj2.mobile.melbourne.fitnessrunning"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294669012575-cce60n22tr2bg1rt3chrc7qkiaamu7t5.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "294669012575-fm83s51klj3n1ftkg6iktvukc4qcs50h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "proj2.mobile.melbourne.fitnessrunning",
+            "certificate_hash": "b598ae7dfdb95bd838ebaa393749820cd8268f87"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNKEc1dA6mLRICxbM3MGvtONu6u9qUKXM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

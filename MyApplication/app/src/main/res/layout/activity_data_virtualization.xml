@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="proj2.mobile.melbourne.fitnessrunning.DataVirtualization">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.github.mikephil.charting.charts.BarChart
+            android:layout_width="360dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:id ="@+id/DistanceBarID"
+            ></com.github.mikephil.charting.charts.BarChart>
+        <com.github.mikephil.charting.charts.BarChart
+            android:layout_width="360dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:id ="@+id/FightsClimbedBarID"
+            ></com.github.mikephil.charting.charts.BarChart>
+        <com.github.mikephil.charting.charts.BarChart
+            android:layout_width="360dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:id ="@+id/CaloriesBarID"
+            ></com.github.mikephil.charting.charts.BarChart>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <com.github.mikephil.charting.charts.PieChart
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:id="@+id/piechartID">
+            </com.github.mikephil.charting.charts.PieChart>
+            <com.github.mikephil.charting.charts.PieChart
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:id="@+id/piechartID2">
+            </com.github.mikephil.charting.charts.PieChart>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

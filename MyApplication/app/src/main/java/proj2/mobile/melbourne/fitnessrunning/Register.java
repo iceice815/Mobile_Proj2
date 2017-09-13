@@ -13,10 +13,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.SettableFuture;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.http.NextServiceFilterCallback;
 import com.microsoft.windowsazure.mobileservices.http.OkHttpClientFactory;
@@ -28,7 +24,9 @@ import com.squareup.okhttp.OkHttpClient;
 
 import java.net.MalformedURLException;
 import java.util.concurrent.TimeUnit;
-
+/**
+ * Created by iceice on 9/9/17.
+ */
 public class Register extends AppCompatActivity {
 
     private MobileServiceClient mClient;

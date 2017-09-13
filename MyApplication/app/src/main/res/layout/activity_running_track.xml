@@ -1,9 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     tools:context="proj2.mobile.melbourne.fitnessrunning.RunningTrack">
+    <fragment
+        android:id="@+id/mapID"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="530dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+    <LinearLayout
+        android:padding="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#AFEEEE"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+    <TextView
+        android:id="@+id/NameID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:text="0"/>
+    <proj2.mobile.melbourne.fitnessrunning.FtoggleButton
+        android:id="@+id/ToggleID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="Start"
+        android:textOn="Stop"
+        android:layout_alignParentBottom="true"
 
-</android.support.constraint.ConstraintLayout>
+        android:layout_marginLeft="90dp"/>
+    <proj2.mobile.melbourne.fitnessrunning.FButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/RecordID"
+        android:text="Record"
+        android:layout_alignParentRight="true"
+
+        android:layout_marginLeft="70dp"/>
+    </LinearLayout>
+
+</RelativeLayout>

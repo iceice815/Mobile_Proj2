@@ -94,13 +94,17 @@ public class Login extends AppCompatActivity {
                             {
                                 if (info.getmPassword().equals(Password)) {
                                     //if the password is correct, then transfer to the operation interface
-                                    Intent intent1 = new Intent(Login.this, Operation.class);
+                                    Intent intent1 = new Intent(Login.this, RunningTrack.class);
+                                    intent1.putExtra("username",Username);
                                     startActivity(intent1);
+
+
                                 } else {
                                     username.setText("");
                                     password.setText("");
                                 }
                             }
+                            finish();
                         }
                     });
 
