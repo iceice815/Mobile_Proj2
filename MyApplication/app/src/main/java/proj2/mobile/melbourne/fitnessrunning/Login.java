@@ -101,14 +101,10 @@ public class Login extends AppCompatActivity {
                                 if (info.getmPassword().equals(password)) {
                                     //if the password is correct, then transfer to the operation interface
                                     Intent intent1 = new Intent(Login.this, RunningTrack.class);
-                                    intent1.putExtra("username",Username);
+                                    intent1.putExtra("username",username);
                                     startActivity(intent1);
-<<<<<<< HEAD
 
 
-=======
-                                    finish();
->>>>>>> 0913
                                 } else {
                                     mUsername.setText("");
                                     mPassword.setText("");
