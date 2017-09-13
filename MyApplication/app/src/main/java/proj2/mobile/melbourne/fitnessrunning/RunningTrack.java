@@ -252,7 +252,7 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
         final RecordTrack recordTrack = new RecordTrack();
         int distance = getDistanceFromLocations(locations);
         int flights_climbed = (int)((upAltitude + downAltitude)/3.3);
-        double calories = upAltitude * 1.7 + downAltitude * 0.6 + distance * 0.065;
+        double calories = (upAltitude + downAltitude) * 1.1 + distance * 0.065;
 
         recordTrack.setmUsername(username);
         recordTrack.setmDate(date_to_string);

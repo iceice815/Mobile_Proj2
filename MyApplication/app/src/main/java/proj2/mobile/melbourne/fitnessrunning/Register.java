@@ -93,6 +93,7 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) {
                 Intent backto_login = new Intent(getApplicationContext(), Login.class);
                 startActivity(backto_login);
+                finish();
             }
         });
 
@@ -140,6 +141,7 @@ public class Register extends AppCompatActivity {
             toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
             toast.show();
         }
+        finish();
     }
 
     /*********************************************************************************
