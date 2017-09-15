@@ -102,11 +102,11 @@ public class DataVirtualization extends AppCompatActivity {
                                     temp_colories = temp_colories + this_week_result.getmColories();
                                 }
                         }
-                        if(temp_colories > 0 ){
-                            xEntrys1.add(mon_to_sun.get(i));
-                            yEntrys1.add(new PieEntry((float)temp_colories,i));
-                            colors1.add(mon_to_sun_colors.get(i));
-                        }
+
+                        xEntrys1.add(mon_to_sun.get(i));
+                        yEntrys1.add(new PieEntry((float)temp_colories,i));
+                        colors1.add(mon_to_sun_colors.get(i));
+
                     }
                     pieDataSet1 = new PieDataSet(yEntrys1,"Weekly Calories");
                     pieDataSet1.setSliceSpace(2);
@@ -303,7 +303,7 @@ public class DataVirtualization extends AppCompatActivity {
         theColors.add(Color.GREEN);
         theColors.add(Color.GRAY);
         theColors.add(Color.BLUE);
-        theColors.add(Color.WHITE);
+        theColors.add(Color.BLACK);
         theColors.add(Color.YELLOW);
         theColors.add(Color.DKGRAY);
         return theColors;
