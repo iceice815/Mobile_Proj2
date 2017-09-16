@@ -1,8 +1,11 @@
 package proj2.mobile.melbourne.fitnessrunning;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.http.NextServiceFilterCallback;
 import com.microsoft.windowsazure.mobileservices.http.OkHttpClientFactory;
@@ -21,41 +23,48 @@ import com.microsoft.windowsazure.mobileservices.http.ServiceFilterRequest;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.squareup.okhttp.OkHttpClient;
-
+import com.squareup.okhttp.internal.framed.FrameReader;
+import android.os.Handler;
 import java.net.MalformedURLException;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-/**
- * Created by iceice on 9/9/17.
- */
-public class Register extends AppCompatActivity {
+import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.val;
+
+public class Register extends AppCompatActivity  {
 
     private MobileServiceClient mClient;
-
     private MobileServiceTable<UserInfo> mUserTable;
 
     private Button sign_up;
     private Button sign_up_cancel;
+
     private EditText mUsername;
     private EditText mPassword;
     private EditText mConfirm_password;
+
     private ProgressBar mProgressBar;
+    private ProgressDialog mProgressDialog;
+    private AlertDialog.Builder mAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        // Button initialization
         sign_up = (Button)findViewById(R.id.Sign_up);
         sign_up_cancel = (Button)findViewById(R.id.Sing_up_cancel);
+        // EditText initialization
         mUsername = (EditText)findViewById(R.id.Username);
         mPassword = (EditText)findViewById(R.id.Password);
         mConfirm_password = (EditText)findViewById(R.id.Confirm_password);
-
+        // Dialog initialization
+        mProgressDialog = initial_ProgressDialog();
+        mAlertDialog = initial_AlertDialog();
 
         try {
-            // Create the Mobile Service Client instance, using the provided
-
-            // Mobile Service URL and key
+            // Create the Mobile Service Client instance,
+            // using the provided Mobile Service URL and key
             mClient = new MobileServiceClient(
                     "https://fitnessrunning.azurewebsites.net",
                     this);
@@ -67,23 +76,26 @@ public class Register extends AppCompatActivity {
                     OkHttpClient client = new OkHttpClient();
                     client.setReadTimeout(20, TimeUnit.SECONDS);
                     client.setWriteTimeout(20, TimeUnit.SECONDS);
-                    return client;
+                    mProgressDialog.dismiss();       return client;
                 }
             });
 
             // Get the Mobile Service Table instance to use
-
             mUserTable = mClient.getTable(UserInfo.class);
+
         }catch (MalformedURLException e) {
-            createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+            createAndShowDialog(new Exception
+                    ("Error in creating Mobile Service. Verify the URL"), "Error");
         } catch (Exception e){
             createAndShowDialog(e, "Error");
         }
+
         //sign_up button event
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                add_user();
+                mProgressDialog.show();
+                sign_up_action();
             }
         });
 
@@ -91,13 +103,58 @@ public class Register extends AppCompatActivity {
         sign_up_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backto_login = new Intent(getApplicationContext(), Login.class);
-                startActivity(backto_login);
+                Intent back_to_login = new Intent(getApplicationContext(), Login.class);
+                startActivity(back_to_login);
                 finish();
             }
         });
+    }
 
+    /**
+     * verify existent user code here:
+     */
+    private void sign_up_action(){
 
+        final String input_user = mUsername.getText().toString();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    final List<UserInfo> all_users = mUserTable.execute().get();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            boolean exist = false;
+                            for (UserInfo user : all_users){
+                                // logic if Multiple Registration:
+                                if (user.getmUsername().equals(input_user)){
+                                    mProgressDialog.dismiss();
+                                    mAlertDialog.show();
+                                    mUsername.setText("");
+                                    mPassword.setText("");
+                                    mConfirm_password.setText("");
+                                    exist = true;
+                                    break;
+                                }
+                            }
+                            // logic if entire new user:
+                            if (!exist){
+                                // Add a toast to show register successfully
+                                Toast toast =Toast.makeText(Register.this,
+                                        "Registration completed!",
+                                        Toast.LENGTH_SHORT);
+                                toast.show();
+                                add_user();
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    createAndShowDialog(e, "Error");
+                }
+                return null;
+            }
+        }.execute();
     }
 
     /**
@@ -123,8 +180,10 @@ public class Register extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Intent backto_login = new Intent(getApplicationContext(), Login.class);
-                                startActivity(backto_login);
+                                // Add a toast to show register successfully
+                                Intent back_to_login =
+                                        new Intent(getApplicationContext(), Login.class);
+                                startActivity(back_to_login);
                             }
                         });
                     } catch (Exception e) {
@@ -133,11 +192,14 @@ public class Register extends AppCompatActivity {
                     return null;
                 }
             }.execute();
-        }else{
+        }
+        else{
             mUsername.setText("");
             mPassword.setText("");
             mConfirm_password.setText("");
-            Toast toast =Toast.makeText(Register.this, "Your username and password are not correct!", Toast.LENGTH_SHORT);
+            Toast toast =Toast.makeText(Register.this,
+                    "Your username and password are not correct!",
+                    Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
             toast.show();
         }
@@ -181,5 +243,37 @@ public class Register extends AppCompatActivity {
         builder.create().show();
     }
 
+    /**
+     * Creates a ProgressDialog and return it
+     */
+    private ProgressDialog initial_ProgressDialog(){
 
+        ProgressDialog progressDialog = new ProgressDialog(Register.this);
+
+        progressDialog.setTitle("Registering your account");
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+
+        return progressDialog;
+    }
+
+    /**
+     * Creates a AlertDialog.Builder and return it
+     */
+    private AlertDialog.Builder initial_AlertDialog(){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(Register.this);
+
+        dialog.setTitle("Multiple Registration");
+        dialog.setMessage("The username is existed, please choose another one!");
+        dialog.setCancelable(false);
+
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        return dialog;
+    }
 }
