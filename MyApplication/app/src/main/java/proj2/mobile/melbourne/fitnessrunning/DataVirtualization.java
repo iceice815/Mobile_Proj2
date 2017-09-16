@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -32,8 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
-
-import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.ne;
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.val;
 
 public class DataVirtualization extends AppCompatActivity {
@@ -66,12 +65,10 @@ public class DataVirtualization extends AppCompatActivity {
         //get each day's color
         mon_to_sun_colors = get_mon_to_sun_colors();
         //vitualize two piecharts
-        vistualize_pieChart();
+        virtualize_pieChart();
         //set their property
         setPieChartProperty(pie_chart1);
         setPieChartProperty(pie_chart2);
-
-
         print_distance_bar_chart();
         print_flight_bar_chart();
         print_calorie_bar_chart();
@@ -92,7 +89,7 @@ public class DataVirtualization extends AppCompatActivity {
     /**
      * virtualize pieChart1
      */
-    private void vistualize_pieChart(){
+    private void virtualize_pieChart(){
 
 
         new AsyncTask<Object, Object, Void>() {
@@ -105,7 +102,7 @@ public class DataVirtualization extends AppCompatActivity {
 
                 try {
                     /**
-                     *transaction logic for piechart1            //从这里开始
+                     *transaction logic for piechart1
                      */
                     ArrayList<PieEntry> yEntrys1 = new ArrayList<>();
                     ArrayList<String> xEntrys1 =new ArrayList<>();
@@ -131,10 +128,8 @@ public class DataVirtualization extends AppCompatActivity {
                     pieDataSet1.setColors(colors1);
                     pieData1 = new PieData(pieDataSet1);
                     /**
-                     *transaction logic for piechart1  END        //到115行
+                     *transaction logic for piechart1  END
                      */
-
-
                     /**
                      *transaction logic for piechart2  BEGIN
                      */
@@ -199,7 +194,6 @@ public class DataVirtualization extends AppCompatActivity {
 
     }
 
-
     private List<RecordTrack> get_today_results(List<RecordTrack> results){
         List<RecordTrack> today_results =new ArrayList<>();
         String today = get_today_date();
@@ -225,8 +219,6 @@ public class DataVirtualization extends AppCompatActivity {
      * @return an Arraylist containing current week date information
      */
 
-
-
     public String get_today_date(){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
@@ -234,31 +226,15 @@ public class DataVirtualization extends AppCompatActivity {
         return today_to_string;
     }
 
-
-
-
-
-    private ArrayList<Integer> get_mon_to_sun_colors(){
-        ArrayList<Integer> theColors=new ArrayList<>();
-        theColors.add(Color.RED);
-        theColors.add(Color.GREEN);
-        theColors.add(Color.GRAY);
-        theColors.add(Color.BLUE);
-        theColors.add(Color.WHITE);
-        theColors.add(Color.YELLOW);
-        theColors.add(Color.DKGRAY);
-        return theColors;
-
-    }
     private ArrayList<String> get_mon_to_sun(){
         ArrayList<String> theDates=new ArrayList<>();
-        theDates.add("Monday");
-        theDates.add("Tuesday");
-        theDates.add("Wednesday");
-        theDates.add("Thursday");
-        theDates.add("Friday");
-        theDates.add("Saturday");
-        theDates.add("Sunday");
+        theDates.add("Mon");
+        theDates.add("Tue");
+        theDates.add("Wed");
+        theDates.add("Thu");
+        theDates.add("Fri");
+        theDates.add("Sat");
+        theDates.add("Sun");
         return theDates;
     }
 
@@ -271,10 +247,6 @@ public class DataVirtualization extends AppCompatActivity {
         }
 
     }
-
-
-
-
 
 
     public void print_distance_bar_chart(){
@@ -337,9 +309,6 @@ public class DataVirtualization extends AppCompatActivity {
         }.execute();
 
 
-
-
-
         bar_distance_chart = (BarChart)findViewById(R.id.DistanceBarID);
         for(int i = 0;i<7;i++){
             barEntries.add(new BarEntry(i, 0));
@@ -350,26 +319,11 @@ public class DataVirtualization extends AppCompatActivity {
         bar_distance_chart.setTouchEnabled(true);
         bar_distance_chart.setDragEnabled(true);
         bar_distance_chart.setScaleEnabled(true);
-
-
-
-        ArrayList<String> theDates = new ArrayList<>();
-        theDates.add("Mon");
-        theDates.add("Tue");
-        theDates.add("Wed");
-        theDates.add("Thu");
-        theDates.add("Fri");
-        theDates.add("Sat");
-        theDates.add("Sun");
-
         XAxis xAxis =bar_distance_chart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
-
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(mon_to_sun));
         Refresh_distance_Chart(run_distance);
 
     }
-
-
 
     public void Refresh_distance_Chart(final List<Integer> run_distance){
         bar_distance_chart = (BarChart)findViewById(R.id.DistanceBarID);
@@ -392,30 +346,19 @@ public class DataVirtualization extends AppCompatActivity {
                         bar_distance_chart.setDragEnabled(true);
                         bar_distance_chart.setScaleEnabled(true);
                         bar_distance_chart.setActivated(true);
+                        Description ds = new Description();
+                        ds.setText("Weekly Running Distance");
+                        bar_distance_chart.setDescription(ds);
                     }
                 });
                 return null;
             }
         }.execute();
 
-
-
-        ArrayList<String> theDates = new ArrayList<>();
-        theDates.add("Mon");
-        theDates.add("Tue");
-        theDates.add("Wed");
-        theDates.add("Thu");
-        theDates.add("Fri");
-        theDates.add("Sat");
-        theDates.add("Sun");
-
         XAxis xAxis =bar_distance_chart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(mon_to_sun));
 
     }
-
-
-
 
     public void print_flight_bar_chart(){
         final List<Integer> climb_distance = new ArrayList<>();
@@ -478,9 +421,6 @@ public class DataVirtualization extends AppCompatActivity {
         }.execute();
 
 
-
-
-
         bar_flight_chart = (BarChart)findViewById(R.id.FightsClimbedBarID);
         for(int i = 0;i<7;i++){
             barEntries.add(new BarEntry(i, 0));
@@ -492,25 +432,12 @@ public class DataVirtualization extends AppCompatActivity {
         bar_flight_chart.setDragEnabled(true);
         bar_flight_chart.setScaleEnabled(true);
 
-
-
-        ArrayList<String> theDates = new ArrayList<>();
-        theDates.add("Mon");
-        theDates.add("Tue");
-        theDates.add("Wed");
-        theDates.add("Thu");
-        theDates.add("Fri");
-        theDates.add("Sat");
-        theDates.add("Sun");
-
         XAxis xAxis =bar_flight_chart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(mon_to_sun));
 
         Refresh_flight_Chart(climb_distance);
 
     }
-
-
 
     public void Refresh_flight_Chart(final List<Integer> run_distance){
         bar_flight_chart = (BarChart)findViewById(R.id.FightsClimbedBarID);
@@ -533,29 +460,19 @@ public class DataVirtualization extends AppCompatActivity {
                         bar_flight_chart.setDragEnabled(true);
                         bar_flight_chart.setScaleEnabled(true);
                         bar_flight_chart.setActivated(true);
+
+                        Description ds = new Description();
+                        ds.setText("Weekly Flights Climbed");
+                        bar_flight_chart.setDescription(ds);
                     }
                 });
                 return null;
             }
         }.execute();
-
-
-
-        ArrayList<String> theDates = new ArrayList<>();
-        theDates.add("Mon");
-        theDates.add("Tue");
-        theDates.add("Wed");
-        theDates.add("Thu");
-        theDates.add("Fri");
-        theDates.add("Sat");
-        theDates.add("Sun");
-
         XAxis xAxis =bar_flight_chart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(mon_to_sun));
 
     }
-
-    
     public void print_calorie_bar_chart(){
         final List<Float> calorie = new ArrayList<>();
 
@@ -616,9 +533,6 @@ public class DataVirtualization extends AppCompatActivity {
         }.execute();
 
 
-
-
-
         bar_calorie_chart = (BarChart)findViewById(R.id.CaloriesBarID);
         for(int i = 0;i<7;i++){
             barEntries.add(new BarEntry(i, 0));
@@ -629,26 +543,12 @@ public class DataVirtualization extends AppCompatActivity {
         bar_calorie_chart.setTouchEnabled(true);
         bar_calorie_chart.setDragEnabled(true);
         bar_calorie_chart.setScaleEnabled(true);
-
-
-        ArrayList<String> theDates = new ArrayList<>();
-        theDates.add("Mon");
-        theDates.add("Tue");
-        theDates.add("Wed");
-        theDates.add("Thu");
-        theDates.add("Fri");
-        theDates.add("Sat");
-        theDates.add("Sun");
-
         XAxis xAxis =bar_calorie_chart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(mon_to_sun));
 
         Refresh_calorie_Chart(calorie);
 
     }
-
-
-
     public void Refresh_calorie_Chart(final List<Float> run_distance){
         bar_calorie_chart = (BarChart)findViewById(R.id.CaloriesBarID);
         final ArrayList<BarEntry> barEntries = new ArrayList<>();
@@ -671,33 +571,18 @@ public class DataVirtualization extends AppCompatActivity {
                         bar_calorie_chart.setDragEnabled(true);
                         bar_calorie_chart.setScaleEnabled(true);
                         bar_calorie_chart.setActivated(true);
+                        Description ds = new Description();
+                        ds.setText("Weekly Calories");
+                        bar_calorie_chart.setDescription(ds);
                     }
                 });
                 return null;
             }
         }.execute();
-
-
-
-        ArrayList<String> theDates = new ArrayList<>();
-        theDates.add("Mon");
-        theDates.add("Tue");
-        theDates.add("Wed");
-        theDates.add("Thu");
-        theDates.add("Fri");
-        theDates.add("Sat");
-        theDates.add("Sun");
-
         XAxis xAxis =bar_calorie_chart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(mon_to_sun));
 
     }
-
-
-
-
-
-
 
     private ArrayList<String> get_week_list(){
         ArrayList<String> list = new ArrayList<>();
@@ -785,9 +670,9 @@ public class DataVirtualization extends AppCompatActivity {
         }
         return curDate;
     }
-<<<<<<< HEAD
-    private ArrayList<Integer> get_mon_to_sun_colors(){
-        ArrayList<Integer> theColors=new ArrayList<>();
+
+    private ArrayList<Integer> get_mon_to_sun_colors() {
+        ArrayList<Integer> theColors = new ArrayList<>();
         theColors.add(Color.RED);
         theColors.add(Color.GREEN);
         theColors.add(Color.GRAY);
@@ -796,11 +681,7 @@ public class DataVirtualization extends AppCompatActivity {
         theColors.add(Color.YELLOW);
         theColors.add(Color.DKGRAY);
         return theColors;
-=======
->>>>>>> 0916
-
-
-
+    }
 
     private List<RecordTrack> get_items_from_table(String Username) throws ExecutionException, InterruptedException, MobileServiceException {
         //return a item list which has the same username with the user input
