@@ -6,11 +6,17 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceException;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
@@ -21,14 +27,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
+import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.ne;
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.val;
 
 public class DataVirtualization extends AppCompatActivity {
     private PieChart pie_chart1;
     private PieChart pie_chart2;
+    private BarChart bar_distance_chart;
+    private BarChart bar_flight_chart;
+    private BarChart bar_calorie_chart;
 
     private MobileServiceClient mClient;
     private MobileServiceTable<RecordTrack> mUserInfoTable;
@@ -59,6 +72,10 @@ public class DataVirtualization extends AppCompatActivity {
         setPieChartProperty(pie_chart2);
 
 
+        print_distance_bar_chart();
+        print_flight_bar_chart();
+        print_calorie_bar_chart();
+
     }
     /**
      * set pie chart property
@@ -88,7 +105,7 @@ public class DataVirtualization extends AppCompatActivity {
 
                 try {
                     /**
-                     *transaction logic for piechart1
+                     *transaction logic for piechart1            //从这里开始
                      */
                     ArrayList<PieEntry> yEntrys1 = new ArrayList<>();
                     ArrayList<String> xEntrys1 =new ArrayList<>();
@@ -114,7 +131,7 @@ public class DataVirtualization extends AppCompatActivity {
                     pieDataSet1.setColors(colors1);
                     pieData1 = new PieData(pieDataSet1);
                     /**
-                     *transaction logic for piechart1  END
+                     *transaction logic for piechart1  END        //到115行
                      */
 
 
@@ -207,6 +224,481 @@ public class DataVirtualization extends AppCompatActivity {
      *
      * @return an Arraylist containing current week date information
      */
+
+
+
+    public String get_today_date(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        String today_to_string =simpleDateFormat.format(date);
+        return today_to_string;
+    }
+
+
+
+
+
+    private ArrayList<Integer> get_mon_to_sun_colors(){
+        ArrayList<Integer> theColors=new ArrayList<>();
+        theColors.add(Color.RED);
+        theColors.add(Color.GREEN);
+        theColors.add(Color.GRAY);
+        theColors.add(Color.BLUE);
+        theColors.add(Color.WHITE);
+        theColors.add(Color.YELLOW);
+        theColors.add(Color.DKGRAY);
+        return theColors;
+
+    }
+    private ArrayList<String> get_mon_to_sun(){
+        ArrayList<String> theDates=new ArrayList<>();
+        theDates.add("Monday");
+        theDates.add("Tuesday");
+        theDates.add("Wednesday");
+        theDates.add("Thursday");
+        theDates.add("Friday");
+        theDates.add("Saturday");
+        theDates.add("Sunday");
+        return theDates;
+    }
+
+    private void init_table(){
+        try {
+            mClient = new MobileServiceClient("https://fitnessrunning.azurewebsites.net", this);
+            mUserInfoTable = mClient.getTable(RecordTrack.class);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
+
+
+    public void print_distance_bar_chart(){
+        final List<Integer> run_distance = new ArrayList<>();
+
+        final String username;
+        Intent rec_intent = getIntent();
+        username = rec_intent.getStringExtra("username");
+
+        final ArrayList<BarEntry> barEntries = new ArrayList<>();
+
+        new AsyncTask<Object, Object, Void>() {
+            @Override
+            protected Void doInBackground(Object... params) {
+
+
+                try {
+                    final List<RecordTrack> results = get_items_from_table(username);
+
+                    ArrayList<String> date_list = get_week_list();
+
+                    Map<String,Integer> map=new HashMap<String,Integer>();
+                    for(RecordTrack infor:results){
+                        if(map.containsKey(infor.getmDate())){
+                            int temp_distance = map.get(infor.getmDate());
+                            map.put(infor.getmDate(),temp_distance+infor.getmDistance());
+                        }
+                        else
+                            map.put(infor.getmDate(),0);
+                    }
+
+                    Map<Integer,Integer> map_this_week = new TreeMap<Integer, Integer>();
+
+
+                    for(int i = 0;i<date_list.size();i++){
+                        if(map.containsKey(date_list.get(i))){
+                            map_this_week.put(i,map.get(date_list.get(i)));
+                        }
+                        else
+                            map_this_week.put(i,0);
+                    }
+
+
+                    for (int i = 0;i<date_list.size();i++){
+                        run_distance.add(map_this_week.get(i));
+                    }
+
+
+
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (MobileServiceException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }.execute();
+
+
+
+
+
+        bar_distance_chart = (BarChart)findViewById(R.id.DistanceBarID);
+        for(int i = 0;i<7;i++){
+            barEntries.add(new BarEntry(i, 0));
+        }
+        BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
+        BarData theData = new BarData(barDataSet);
+        bar_distance_chart.setData(theData);
+        bar_distance_chart.setTouchEnabled(true);
+        bar_distance_chart.setDragEnabled(true);
+        bar_distance_chart.setScaleEnabled(true);
+
+
+
+        ArrayList<String> theDates = new ArrayList<>();
+        theDates.add("Mon");
+        theDates.add("Tue");
+        theDates.add("Wed");
+        theDates.add("Thu");
+        theDates.add("Fri");
+        theDates.add("Sat");
+        theDates.add("Sun");
+
+        XAxis xAxis =bar_distance_chart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
+
+        Refresh_distance_Chart(run_distance);
+
+    }
+
+
+
+    public void Refresh_distance_Chart(final List<Integer> run_distance){
+        bar_distance_chart = (BarChart)findViewById(R.id.DistanceBarID);
+        final ArrayList<BarEntry> barEntries = new ArrayList<>();
+        new AsyncTask<Void,Void,Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(int i = 0;i<run_distance.size();i++){
+                            barEntries.add(new BarEntry(i, run_distance.get(i)));
+                        }
+                        BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
+                        BarData theData = new BarData(barDataSet);
+                        bar_distance_chart.setData(theData);
+                        bar_distance_chart.setTouchEnabled(true);
+                        bar_distance_chart.setDragEnabled(true);
+                        bar_distance_chart.setScaleEnabled(true);
+                        bar_distance_chart.setActivated(true);
+                    }
+                });
+                return null;
+            }
+        }.execute();
+
+
+
+        ArrayList<String> theDates = new ArrayList<>();
+        theDates.add("Mon");
+        theDates.add("Tue");
+        theDates.add("Wed");
+        theDates.add("Thu");
+        theDates.add("Fri");
+        theDates.add("Sat");
+        theDates.add("Sun");
+
+        XAxis xAxis =bar_distance_chart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
+
+    }
+
+
+
+
+    public void print_flight_bar_chart(){
+        final List<Integer> climb_distance = new ArrayList<>();
+
+        final String username;
+        Intent rec_intent = getIntent();
+        username = rec_intent.getStringExtra("username");
+
+        final ArrayList<BarEntry> barEntries = new ArrayList<>();
+
+        new AsyncTask<Object, Object, Void>() {
+            @Override
+            protected Void doInBackground(Object... params) {
+
+
+                try {
+                    final List<RecordTrack> results = get_items_from_table(username);
+
+                    ArrayList<String> date_list = get_week_list();
+
+                    Map<String,Integer> map=new HashMap<String,Integer>();
+                    for(RecordTrack infor:results){
+                        if(map.containsKey(infor.getmDate())){
+                            int temp_distance = map.get(infor.getmDate());
+                            map.put(infor.getmDate(),temp_distance+infor.getmFlightsClimbed());
+                        }
+                        else
+                            map.put(infor.getmDate(),0);
+                    }
+
+                    Map<Integer,Integer> map_this_week = new TreeMap<Integer, Integer>();
+
+
+                    for(int i = 0;i<date_list.size();i++){
+                        if(map.containsKey(date_list.get(i))){
+                            map_this_week.put(i,map.get(date_list.get(i)));
+                        }
+                        else
+                            map_this_week.put(i,0);
+                    }
+
+
+                    for (int i = 0;i<date_list.size();i++){
+                        climb_distance.add(map_this_week.get(i));
+                    }
+
+
+
+
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (MobileServiceException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }.execute();
+
+
+
+
+
+        bar_flight_chart = (BarChart)findViewById(R.id.FightsClimbedBarID);
+        for(int i = 0;i<7;i++){
+            barEntries.add(new BarEntry(i, 0));
+        }
+        BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
+        BarData theData = new BarData(barDataSet);
+        bar_flight_chart.setData(theData);
+        bar_flight_chart.setTouchEnabled(true);
+        bar_flight_chart.setDragEnabled(true);
+        bar_flight_chart.setScaleEnabled(true);
+
+
+
+        ArrayList<String> theDates = new ArrayList<>();
+        theDates.add("Mon");
+        theDates.add("Tue");
+        theDates.add("Wed");
+        theDates.add("Thu");
+        theDates.add("Fri");
+        theDates.add("Sat");
+        theDates.add("Sun");
+
+        XAxis xAxis =bar_flight_chart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
+
+        Refresh_flight_Chart(climb_distance);
+
+    }
+
+
+
+    public void Refresh_flight_Chart(final List<Integer> run_distance){
+        bar_flight_chart = (BarChart)findViewById(R.id.FightsClimbedBarID);
+        final ArrayList<BarEntry> barEntries = new ArrayList<>();
+        new AsyncTask<Void,Void,Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(int i = 0;i<run_distance.size();i++){
+                            barEntries.add(new BarEntry(i, run_distance.get(i)));
+                        }
+                        BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
+                        BarData theData = new BarData(barDataSet);
+                        bar_flight_chart.setData(theData);
+                        bar_flight_chart.setTouchEnabled(true);
+                        bar_flight_chart.setDragEnabled(true);
+                        bar_flight_chart.setScaleEnabled(true);
+                        bar_flight_chart.setActivated(true);
+                    }
+                });
+                return null;
+            }
+        }.execute();
+
+
+
+        ArrayList<String> theDates = new ArrayList<>();
+        theDates.add("Mon");
+        theDates.add("Tue");
+        theDates.add("Wed");
+        theDates.add("Thu");
+        theDates.add("Fri");
+        theDates.add("Sat");
+        theDates.add("Sun");
+
+        XAxis xAxis =bar_flight_chart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
+
+    }
+
+    
+    public void print_calorie_bar_chart(){
+        final List<Float> calorie = new ArrayList<>();
+
+        final String username;
+        Intent rec_intent = getIntent();
+        username = rec_intent.getStringExtra("username");
+
+        final ArrayList<BarEntry> barEntries = new ArrayList<>();
+
+        new AsyncTask<Object, Object, Void>() {
+            @Override
+            protected Void doInBackground(Object... params) {
+
+
+                try {
+                    final List<RecordTrack> results = get_items_from_table(username);
+
+                    ArrayList<String> date_list = get_week_list();
+
+                    Map<String,Float> map=new HashMap<String,Float>();
+                    for(RecordTrack infor:results){
+                        if(map.containsKey(infor.getmDate())){
+                            double temp_distance = map.get(infor.getmDate());
+                            map.put(infor.getmDate(), (float) (temp_distance+infor.getmColories()));
+                        }
+                        else
+                            map.put(infor.getmDate(), (float) 0);
+                    }
+
+                    Map<Integer,Float> map_this_week = new TreeMap<Integer, Float>();
+
+
+                    for(int i = 0;i<date_list.size();i++){
+                        if(map.containsKey(date_list.get(i))){
+                            map_this_week.put(i,map.get(date_list.get(i)));
+                        }
+                        else
+                            map_this_week.put(i, (float) 0.0);
+                    }
+
+
+                    for (int i = 0;i<date_list.size();i++){
+                        calorie.add(map_this_week.get(i));
+                    }
+
+
+
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (MobileServiceException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }.execute();
+
+
+
+
+
+        bar_calorie_chart = (BarChart)findViewById(R.id.CaloriesBarID);
+        for(int i = 0;i<7;i++){
+            barEntries.add(new BarEntry(i, 0));
+        }
+        BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
+        BarData theData = new BarData(barDataSet);
+        bar_calorie_chart.setData(theData);
+        bar_calorie_chart.setTouchEnabled(true);
+        bar_calorie_chart.setDragEnabled(true);
+        bar_calorie_chart.setScaleEnabled(true);
+
+
+        ArrayList<String> theDates = new ArrayList<>();
+        theDates.add("Mon");
+        theDates.add("Tue");
+        theDates.add("Wed");
+        theDates.add("Thu");
+        theDates.add("Fri");
+        theDates.add("Sat");
+        theDates.add("Sun");
+
+        XAxis xAxis =bar_calorie_chart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
+
+        Refresh_calorie_Chart(calorie);
+
+    }
+
+
+
+    public void Refresh_calorie_Chart(final List<Float> run_distance){
+        bar_calorie_chart = (BarChart)findViewById(R.id.CaloriesBarID);
+        final ArrayList<BarEntry> barEntries = new ArrayList<>();
+        new AsyncTask<Void,Void,Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(int i = 0;i<run_distance.size();i++){
+                            float calories = (float)run_distance.get(i);
+                            barEntries.add(new BarEntry(i, run_distance.get(i)));
+                        }
+                        BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
+                        BarData theData = new BarData(barDataSet);
+                        bar_calorie_chart.setData(theData);
+                        bar_calorie_chart.setTouchEnabled(true);
+                        bar_calorie_chart.setDragEnabled(true);
+                        bar_calorie_chart.setScaleEnabled(true);
+                        bar_calorie_chart.setActivated(true);
+                    }
+                });
+                return null;
+            }
+        }.execute();
+
+
+
+        ArrayList<String> theDates = new ArrayList<>();
+        theDates.add("Mon");
+        theDates.add("Tue");
+        theDates.add("Wed");
+        theDates.add("Thu");
+        theDates.add("Fri");
+        theDates.add("Sat");
+        theDates.add("Sun");
+
+        XAxis xAxis =bar_calorie_chart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
+
+    }
+
+
+
+
+
+
+
     private ArrayList<String> get_week_list(){
         ArrayList<String> list = new ArrayList<>();
         Date date = new Date();
@@ -280,12 +772,8 @@ public class DataVirtualization extends AppCompatActivity {
         }
         return list;
     }
-    public String get_today_date(){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        Date date = new Date();
-        String today_to_string =simpleDateFormat.format(date);
-        return today_to_string;
-    }
+
+
     private String getDate(Calendar cld){
         String curDate = cld.get(Calendar.YEAR)+"/"+(cld.get(Calendar.MONTH)+1)+"/"
                 +cld.get(Calendar.DAY_OF_MONTH);
@@ -297,6 +785,7 @@ public class DataVirtualization extends AppCompatActivity {
         }
         return curDate;
     }
+<<<<<<< HEAD
     private ArrayList<Integer> get_mon_to_sun_colors(){
         ArrayList<Integer> theColors=new ArrayList<>();
         theColors.add(Color.RED);
@@ -307,31 +796,15 @@ public class DataVirtualization extends AppCompatActivity {
         theColors.add(Color.YELLOW);
         theColors.add(Color.DKGRAY);
         return theColors;
+=======
+>>>>>>> 0916
 
-    }
-    private ArrayList<String> get_mon_to_sun(){
-        ArrayList<String> theDates=new ArrayList<>();
-        theDates.add("Monday");
-        theDates.add("Tuesday");
-        theDates.add("Wednesday");
-        theDates.add("Thursday");
-        theDates.add("Friday");
-        theDates.add("Saturday");
-        theDates.add("Sunday");
-        return theDates;
-    }
 
-    private void init_table(){
-        try {
-            mClient = new MobileServiceClient("https://fitnessrunning.azurewebsites.net", this);
-            mUserInfoTable = mClient.getTable(RecordTrack.class);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
 
-    }
+
     private List<RecordTrack> get_items_from_table(String Username) throws ExecutionException, InterruptedException, MobileServiceException {
         //return a item list which has the same username with the user input
         return mUserInfoTable.where().field("username").eq(val(Username)).execute().get();
     }
+
 }
