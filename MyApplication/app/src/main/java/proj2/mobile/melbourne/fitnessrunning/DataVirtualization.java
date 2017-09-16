@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -73,17 +72,9 @@ public class DataVirtualization extends AppCompatActivity {
         setPieChartProperty(pie_chart2);
 
 
-
-
-
-        final List<Integer> run_distance = new ArrayList<>();
-        final List<Integer> climb_distance = new ArrayList<>();
-        final List<Float> calorie = new ArrayList<>();
-        print_distance_bar_chart(run_distance);
-        print_flight_bar_chart(climb_distance);
-        print_calorie_bar_chart(calorie);
-
-//        RefreshChart(run_distance);
+        print_distance_bar_chart();
+        print_flight_bar_chart();
+        print_calorie_bar_chart();
 
     }
     /**
@@ -286,7 +277,8 @@ public class DataVirtualization extends AppCompatActivity {
 
 
 
-    public void print_distance_bar_chart(final List<Integer> run_distance){
+    public void print_distance_bar_chart(){
+        final List<Integer> run_distance = new ArrayList<>();
 
         final String username;
         Intent rec_intent = getIntent();
@@ -425,7 +417,8 @@ public class DataVirtualization extends AppCompatActivity {
 
 
 
-    public void print_flight_bar_chart(final List<Integer> run_distance){
+    public void print_flight_bar_chart(){
+        final List<Integer> climb_distance = new ArrayList<>();
 
         final String username;
         Intent rec_intent = getIntent();
@@ -452,7 +445,6 @@ public class DataVirtualization extends AppCompatActivity {
                         else
                             map.put(infor.getmDate(),0);
                     }
-                    Log.i("",map+"ABB");
 
                     Map<Integer,Integer> map_this_week = new TreeMap<Integer, Integer>();
 
@@ -467,9 +459,8 @@ public class DataVirtualization extends AppCompatActivity {
 
 
                     for (int i = 0;i<date_list.size();i++){
-                        run_distance.add(map_this_week.get(i));
+                        climb_distance.add(map_this_week.get(i));
                     }
-                    Log.i("",run_distance+"ABB");
 
 
 
@@ -515,7 +506,7 @@ public class DataVirtualization extends AppCompatActivity {
         XAxis xAxis =bar_flight_chart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
 
-        Refresh_flight_Chart(run_distance);
+        Refresh_flight_Chart(climb_distance);
 
     }
 
@@ -534,7 +525,6 @@ public class DataVirtualization extends AppCompatActivity {
                     public void run() {
                         for(int i = 0;i<run_distance.size();i++){
                             barEntries.add(new BarEntry(i, run_distance.get(i)));
-                            Log.i("",run_distance.get(i)+"ABB");
                         }
                         BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
                         BarData theData = new BarData(barDataSet);
@@ -566,7 +556,8 @@ public class DataVirtualization extends AppCompatActivity {
     }
 
     
-    public void print_calorie_bar_chart(final List<Float> run_distance){
+    public void print_calorie_bar_chart(){
+        final List<Float> calorie = new ArrayList<>();
 
         final String username;
         Intent rec_intent = getIntent();
@@ -607,7 +598,7 @@ public class DataVirtualization extends AppCompatActivity {
 
 
                     for (int i = 0;i<date_list.size();i++){
-                        run_distance.add(map_this_week.get(i));
+                        calorie.add(map_this_week.get(i));
                     }
 
 
@@ -652,7 +643,7 @@ public class DataVirtualization extends AppCompatActivity {
         XAxis xAxis =bar_calorie_chart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(theDates));
 
-        Refresh_calorie_Chart(run_distance);
+        Refresh_calorie_Chart(calorie);
 
     }
 
