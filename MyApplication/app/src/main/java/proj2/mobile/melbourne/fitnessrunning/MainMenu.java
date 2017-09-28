@@ -30,7 +30,7 @@ public class MainMenu extends AppCompatActivity {
                 Intent intent1 = new Intent(MainMenu.this, RunningTrack.class);
                 intent1.putExtra("username",username);
                 startActivity(intent1);
-
+//
             }
         });
 
