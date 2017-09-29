@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
@@ -104,6 +106,7 @@ public class Login extends AppCompatActivity {
                                     Intent intent1 = new Intent(Login.this, MainMenu.class);
                                     intent1.putExtra("username",username);
                                     startActivity(intent1);
+                                    finish();
 
 
                                 } else {
@@ -111,7 +114,15 @@ public class Login extends AppCompatActivity {
                                     mPassword.setText("");
                                 }
                             }
-                            finish();
+                            if(results.size()==0) {
+                                Toast toast = Toast.makeText(Login.this,
+                                        "Your username and password are not correct!",
+                                        Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                                toast.show();
+                                mUsername.setText("");
+                                mPassword.setText("");
+                            }
                         }
                     });
 
