@@ -1,4 +1,4 @@
-package proj2.mobile.melbourne.fitnessrunning;
+package proj2.mobile.melbourne.elderfitness;
 
 /**
  * Created by iceice on 11/9/17.

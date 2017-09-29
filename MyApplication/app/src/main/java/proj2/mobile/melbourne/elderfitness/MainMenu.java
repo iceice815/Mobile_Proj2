@@ -1,4 +1,4 @@
-package proj2.mobile.melbourne.fitnessrunning;
+package proj2.mobile.melbourne.elderfitness;
 
 import android.content.Intent;
 import android.os.Bundle;

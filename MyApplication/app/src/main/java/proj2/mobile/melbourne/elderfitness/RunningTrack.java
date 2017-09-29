@@ -1,4 +1,4 @@
-package proj2.mobile.melbourne.fitnessrunning;
+package proj2.mobile.melbourne.elderfitness;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -43,7 +43,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static android.hardware.SensorManager.getAltitude;
-import static proj2.mobile.melbourne.fitnessrunning.DistanceCalculation.getDistanceFromLocations;
+import static proj2.mobile.melbourne.elderfitness.DistanceCalculation.getDistanceFromLocations;
 /**
  * Created by iceice on 9/12/17.
  */

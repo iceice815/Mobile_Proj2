@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="proj2.mobile.melbourne.fitnessrunning">
+    package="proj2.mobile.melbourne.elderfitness">
 
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -29,22 +29,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Login">
+        <activity android:name="proj2.mobile.melbourne.elderfitness.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Register" />
-        <activity android:name=".RunningTrack" />
-        <activity android:name=".MainMenu" />
+        <activity android:name="proj2.mobile.melbourne.elderfitness.Register" />
+        <activity android:name="proj2.mobile.melbourne.elderfitness.RunningTrack" />
+        <activity android:name="proj2.mobile.melbourne.elderfitness.MainMenu" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAcnaTToVEw-beqyMwhfJ21ZvWKeJOZRFI" />
 
-        <activity android:name=".DataVirtualization"></activity>
+        <activity android:name="proj2.mobile.melbourne.elderfitness.DataVirtualization"></activity>
     </application>
 
 </manifest>

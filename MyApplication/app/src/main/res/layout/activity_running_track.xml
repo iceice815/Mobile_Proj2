@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dp"
-    tools:context="proj2.mobile.melbourne.fitnessrunning.RunningTrack">
+    tools:context="proj2.mobile.melbourne.elderfitness.RunningTrack">
     <fragment
         android:id="@+id/mapID"
         android:name="com.google.android.gms.maps.MapFragment"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:text="0"/>
-    <proj2.mobile.melbourne.fitnessrunning.FtoggleButton
+    <proj2.mobile.melbourne.elderfitness.FtoggleButton
         android:id="@+id/ToggleID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         android:layout_alignParentBottom="true"
 
         android:layout_marginLeft="90dp"/>
-    <proj2.mobile.melbourne.fitnessrunning.FButton
+    <proj2.mobile.melbourne.elderfitness.FButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/RecordID"
