@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -274,9 +275,13 @@ public class DataVirtualization extends AppCompatActivity {
                             int temp_distance = map.get(infor.getmDate());
                             map.put(infor.getmDate(),temp_distance+infor.getmDistance());
                         }
-                        else
-                            map.put(infor.getmDate(),0);
+                        else {
+                            map.put(infor.getmDate(), infor.getmDistance());
+                        }
+
                     }
+
+
 
                     Map<Integer,Integer> map_this_week = new TreeMap<Integer, Integer>();
 
@@ -288,6 +293,7 @@ public class DataVirtualization extends AppCompatActivity {
                         else
                             map_this_week.put(i,0);
                     }
+
 
 
                     for (int i = 0;i<date_list.size();i++){
@@ -386,7 +392,7 @@ public class DataVirtualization extends AppCompatActivity {
                             map.put(infor.getmDate(),temp_distance+infor.getmFlightsClimbed());
                         }
                         else
-                            map.put(infor.getmDate(),0);
+                            map.put(infor.getmDate(),infor.getmFlightsClimbed());
                     }
 
                     Map<Integer,Integer> map_this_week = new TreeMap<Integer, Integer>();
@@ -499,7 +505,7 @@ public class DataVirtualization extends AppCompatActivity {
                             map.put(infor.getmDate(), (float) (temp_distance+infor.getmColories()));
                         }
                         else
-                            map.put(infor.getmDate(), (float) 0);
+                            map.put(infor.getmDate(), (float) infor.getmColories());
                     }
 
                     Map<Integer,Float> map_this_week = new TreeMap<Integer, Float>();
