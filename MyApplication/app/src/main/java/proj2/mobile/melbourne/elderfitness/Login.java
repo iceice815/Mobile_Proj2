@@ -47,7 +47,7 @@ public class Login extends AppCompatActivity {
 
         try {
             //get a client of the referred database
-            mClient = new MobileServiceClient("https://fitnessrunning.azurewebsites.net", this);
+            mClient = new MobileServiceClient("https://elderfitness.azurewebsites.net", this);
             //get the table of the database
             mUserInfoTable = mClient.getTable(UserInfo.class);
         } catch (MalformedURLException e) {
@@ -87,6 +87,7 @@ public class Login extends AppCompatActivity {
         final String username = mUsername.getText().toString();
         final String password = mPassword.getText().toString();
 
+
         new AsyncTask<Void, Void, Void>(){
 
             @Override
@@ -104,7 +105,9 @@ public class Login extends AppCompatActivity {
                                     //if the password is correct, then transfer to the operation interface
 //                                    Intent intent1 = new Intent(Login.this, RunningTrack.class);
                                     Intent intent1 = new Intent(Login.this, MainMenu.class);
+                                    intent1.putExtra("Emergency_Number",info.getmEmergencyNumber());
                                     intent1.putExtra("username",username);
+
                                     startActivity(intent1);
                                     finish();
 

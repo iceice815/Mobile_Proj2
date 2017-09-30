@@ -35,6 +35,7 @@ public class Register extends AppCompatActivity  {
     private EditText mUsername;
     private EditText mPassword;
     private EditText mConfirm_password;
+    private EditText mEmergency_Contact;
 
     private ProgressBar mProgressBar;
     private ProgressDialog mProgressDialog;
@@ -50,6 +51,8 @@ public class Register extends AppCompatActivity  {
         // EditText initialization
         mUsername = (EditText)findViewById(R.id.Username);
         mPassword = (EditText)findViewById(R.id.Password);
+        mEmergency_Contact =(EditText)findViewById(R.id.Emergency_Contact_Number);
+
         mConfirm_password = (EditText)findViewById(R.id.Confirm_password);
         // Dialog initialization
         mProgressDialog = initial_ProgressDialog();
@@ -59,7 +62,7 @@ public class Register extends AppCompatActivity  {
             // Create the Mobile Service Client instance,
             // using the provided Mobile Service URL and key
             mClient = new MobileServiceClient(
-                    "https://fitnessrunning.azurewebsites.net",
+                    "https://elderfitness.azurewebsites.net",
                     this);
 
             // Extend timeout from default of 10s to 20s
@@ -127,6 +130,7 @@ public class Register extends AppCompatActivity  {
                                     mUsername.setText("");
                                     mPassword.setText("");
                                     mConfirm_password.setText("");
+                                    mEmergency_Contact.setText("");
                                     exist = true;
                                     break;
                                 }
@@ -162,6 +166,7 @@ public class Register extends AppCompatActivity  {
         final UserInfo userInfo = new UserInfo();
         userInfo.setmUsername(mUsername.getText().toString());
         userInfo.setmPassword(mPassword.getText().toString());
+        userInfo.setmEmergencyNumber(mEmergency_Contact.getText().toString());
         if(mConfirm_password.getText().toString().equals(mPassword.getText().toString())) {
             Log.d("Debug","AsyncJob");
 
@@ -190,6 +195,7 @@ public class Register extends AppCompatActivity  {
             mUsername.setText("");
             mPassword.setText("");
             mConfirm_password.setText("");
+            mEmergency_Contact.setText("");
             Toast toast =Toast.makeText(Register.this,
                     "Your username and password are not correct!",
                     Toast.LENGTH_SHORT);

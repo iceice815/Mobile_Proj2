@@ -240,7 +240,7 @@ public class DataVirtualization extends AppCompatActivity {
 
     private void init_table(){
         try {
-            mClient = new MobileServiceClient("https://fitnessrunning.azurewebsites.net", this);
+            mClient = new MobileServiceClient("https://elderfitness.azurewebsites.net", this);
             mUserInfoTable = mClient.getTable(RecordTrack.class);
         } catch (MalformedURLException e) {
             e.printStackTrace();

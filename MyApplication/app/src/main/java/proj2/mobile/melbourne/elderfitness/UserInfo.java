@@ -19,6 +19,9 @@ public class UserInfo {
     @com.google.gson.annotations.SerializedName("password")
     private String mPassword;
 
+    @com.google.gson.annotations.SerializedName("emergencynumber")
+    private String mEmergencyNumber;
+
 
     /**
      * constructor
@@ -62,6 +65,15 @@ public class UserInfo {
     public void setmPassword(String mPassword) {
         this.mPassword = mPassword;
     }
+
+    public String getmEmergencyNumber() {
+        return mEmergencyNumber;
+    }
+
+    public void setmEmergencyNumber(String mEmergencyNumber) {
+        this.mEmergencyNumber = mEmergencyNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         return o instanceof UserInfo && ((UserInfo) o).mId == mId;

@@ -14,6 +14,7 @@ public class MainMenu extends AppCompatActivity {
     private Button run_button;
     private Button virtialization_button;
     private String username;
+    private String emgergency_number;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,12 +24,14 @@ public class MainMenu extends AppCompatActivity {
 
         Intent rec_intent = getIntent();
         username = rec_intent.getStringExtra("username");
+        emgergency_number = rec_intent.getStringExtra("Emergency_Number");
         run_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent1 = new Intent(MainMenu.this, RunningTrack.class);
                 intent1.putExtra("username",username);
+                intent1.putExtra("Emergency_Number",emgergency_number);
                 startActivity(intent1);
 
             }

@@ -61,6 +61,7 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
     private double upAltitude;
     private double downAltitude;
     private String username;
+    private String emgergency_number;
 
     private SensorManager mSensorManager;
     private LocationManager mLocationManager;
@@ -92,6 +93,7 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
         //set text with username
         Intent rec_intent = getIntent();
         username = rec_intent.getStringExtra("username");
+        emgergency_number = rec_intent.getStringExtra("Emergency_Number");
         mText.setText(username);
 
         ToogleLisener listener = new ToogleLisener();
@@ -395,7 +397,7 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
 
             // Mobile Service URL and key
             mClient = new MobileServiceClient(
-                    "https://fitnessrunning.azurewebsites.net",
+                    "https://elderfitness.azurewebsites.net",
                     this);
 
             // Extend timeout from default of 10s to 20s
