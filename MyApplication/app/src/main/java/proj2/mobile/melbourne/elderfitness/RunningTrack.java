@@ -1,6 +1,7 @@
 package proj2.mobile.melbourne.elderfitness;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,12 +20,14 @@ import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,10 +41,15 @@ import com.microsoft.windowsazure.mobileservices.http.OkHttpClientFactory;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
 import com.squareup.okhttp.OkHttpClient;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import static android.hardware.SensorManager.getAltitude;
@@ -47,29 +57,39 @@ import static proj2.mobile.melbourne.elderfitness.DistanceCalculation.getDistanc
 /**
  * Created by iceice on 9/12/17.
  */
-public class RunningTrack extends AppCompatActivity implements OnMapReadyCallback {
+public class RunningTrack extends AppCompatActivity implements OnMapReadyCallback, InitializeTable{
 
     private MobileServiceClient mClient;
-
     private MobileServiceTable<RecordTrack> mRecordTable;
 
-    private ToggleButton mToggle;
-    private Button mButton;
     private GoogleMap mMap;
+
+    private ToggleButton mToggle;
+    private Button mRecordButton;
+    private Button mEmergencyButton;
     private TextView mText;
+    private TextView mClockCount;
+    private TextView mDistance;
 
     private double upAltitude;
     private double downAltitude;
     private String username;
     private String emgergency_number;
-
+    private Timer timer1 = new Timer();
+    private Timer timer2 = new Timer();
+    private Timer timer3 = new Timer();
+    private static final int DANGEROUS_DISTANCE=30;
+    private int temp_distance;
     private SensorManager mSensorManager;
     private LocationManager mLocationManager;
-
     private Sensor mPressure;
     private SensorEventListener mPressureListener;
-    ArrayList<Location> locations = new ArrayList<Location>();
+    private SmsManager mSmsManager;
 
+    ArrayList<Location> locations = new ArrayList<Location>();
+    private ClockCount clockCount = new ClockCount();
+
+    private CurrentLocationListener currentLocationListener =new CurrentLocationListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +98,11 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
 
         mText = (TextView) findViewById(R.id.NameID);
         mToggle = (ToggleButton) findViewById(R.id.ToggleID);
-        mButton = (Button) findViewById(R.id.RecordID);
+        mRecordButton = (Button) findViewById(R.id.RecordID);
+        mEmergencyButton = (Button) findViewById(R.id.EmergencyID);
+        mClockCount = (TextView)findViewById(R.id.ClockCountID);
+        mDistance = (TextView)findViewById(R.id.DistanceID);
+
         //create sensorManager object from system service
         mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         //use the baromeer sensor
@@ -86,7 +110,7 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
 
 
         //get database and table instance
-        init_database_table();
+        init_table();
         //initilize google map
         init_Map();
 
@@ -98,8 +122,8 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
 
         ToogleLisener listener = new ToogleLisener();
         mToggle.setOnCheckedChangeListener(listener);
-
-        mButton.setOnClickListener(new View.OnClickListener() {
+        //Onclick event for jump to Datavirtualization activity
+        mRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent goto_data = new Intent(getApplicationContext(), DataVirtualization.class);
@@ -107,9 +131,40 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(goto_data);
             }
         });
+        //Onclick event for send message to their family member
+        //if emergency issues happen.
+        GetGPS getGPS = new GetGPS(mLocationManager, getApplicationContext());
+        getGPS.start(currentLocationListener);
+        mEmergencyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                send_sms_to_familymember();
+            }
+        });
+
 
 
     }
+    private void send_sms_to_familymember(){
+         //send sms
+        if(currentLocationListener.getCurrent_location()!=null){
+            //mLocationManager.removeUpdates(currentLocationListener);
+            //PendingIntent pi = PendingIntent.getActivity(RunningTrack.this, 0, new Intent(), 0);
+            String content = "Your family member meets emergency situation at " + get_address(getApplicationContext(), currentLocationListener.getCurrent_location().getLatitude(), currentLocationListener.getCurrent_location().getLongitude())
+                    + ". He/She need your help";
+            try {
+                mSmsManager = SmsManager.getDefault();
+                mSmsManager.sendTextMessage(emgergency_number, null, content, null, null);
+                Toast.makeText(RunningTrack.this, "Sent!", Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+                Toast.makeText(RunningTrack.this, "Failed!", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+
+
+    }
+
 
     private class ToogleLisener implements CompoundButton.OnCheckedChangeListener{
         NewLocationListener location_listener =new NewLocationListener();
@@ -128,6 +183,9 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
                         .show();
                 get_barometer();
                 get_GPS(location_listener);
+                start_clock_count(timer1);
+                start_distance_count(timer2);
+                start_auto_safety(timer3);
             }
             else{
                 mToggle.setChecked(false);
@@ -142,8 +200,82 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
                         .create()
                         .show();
                 mLocationManager.removeUpdates(location_listener);
+                stop_clock_count(timer1);
+                stop_distance_count(timer2);
+                stop_auto_safety(timer3);
             }
         }
+    }
+    private void start_auto_safety(Timer timer3){
+
+        timer3.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                int current_distance = getDistanceFromLocations(locations);
+                if(current_distance-temp_distance<=DANGEROUS_DISTANCE){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            send_sms_to_familymember();
+                        }
+                    });
+                }
+                temp_distance =current_distance;
+            }
+        },0,180000);
+    }
+    private void stop_auto_safety(Timer timer3){
+        timer3.cancel();
+    }
+    private void stop_distance_count(Timer timer2){
+        timer2.cancel();
+        mDistance.setText("0 km");
+    }
+    private void start_distance_count(Timer timer2){
+        timer2.schedule(new TimerTask() {
+            double dis=0;
+            @Override
+            public void run() {
+                int distance = getDistanceFromLocations(locations);
+                dis = (double)distance/1000;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDistance.setText(String.format("%.1f", dis)+" km");
+                    }
+                });
+
+            }
+        },0,1000);
+
+
+    }
+    private void stop_clock_count(Timer timer ){
+        timer.cancel();
+        clockCount.clear();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mClockCount.setText(clockCount.getTime());
+            }
+        });
+    }
+    private void start_clock_count(Timer timer){
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                clockCount.start();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mClockCount.setText(clockCount.getTime());
+                    }
+                });
+
+            }
+        },0,1000);
+
+
     }
     private void get_GPS(NewLocationListener location_listener){
         //get locationManager object, bind lisener
@@ -163,15 +295,16 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, location_listener);
 
     }
+
+
     /**
      * track location in google map based on GPS sensor.
      */
-    private class NewLocationListener implements LocationListener {
+    public class NewLocationListener implements LocationListener {
 
         @Override
         public void onLocationChanged(Location location) {
 
-            Toast.makeText(RunningTrack.this, "gps...", Toast.LENGTH_SHORT).show();
             double lat = location.getLatitude();
             double lng = location.getLongitude();
             goTonLocationZoom(lat,lng,16);
@@ -391,35 +524,6 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
     }
 
-    private void init_database_table(){
-        try {
-            // Create the Mobile Service Client instance, using the provided
-
-            // Mobile Service URL and key
-            mClient = new MobileServiceClient(
-                    "https://elderfitness.azurewebsites.net",
-                    this);
-
-            // Extend timeout from default of 10s to 20s
-            mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {
-                @Override
-                public OkHttpClient createOkHttpClient() {
-                    OkHttpClient client = new OkHttpClient();
-                    client.setReadTimeout(20, TimeUnit.SECONDS);
-                    client.setWriteTimeout(20, TimeUnit.SECONDS);
-                    return client;
-                }
-            });
-
-            // Get the Mobile Service Table instance to use
-
-            mRecordTable = mClient.getTable(RecordTrack.class);
-        }catch (MalformedURLException e) {
-            createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
-        } catch (Exception e){
-            createAndShowDialog(e, "Error");
-        }
-    }
 
     /*********************************************************************************
      ********************************you can ignore it********************************
@@ -462,6 +566,58 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
         super.onResume();
         mSensorManager.registerListener(mPressureListener, mPressure,
                 SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+//
+    public String get_address(Context ctx, double lat, double lng){
+        String full_adrress = null;
+        try{
+            Geocoder geocoder = new Geocoder(ctx, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(lat,lng,1);
+            if(addresses.size()>0){
+                Address address = addresses.get(0);
+                String addr = address.getAddressLine(0);
+                String area = address.getLocality();
+                String city = address.getAdminArea();
+                String country = address.getCountryName();
+                String postalcode =address.getPostalCode();
+                full_adrress=addr+", "+area+", "+city+", "+country+", "+postalcode;
+            }
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return full_adrress;
+    }
+    @Override
+    public void init_table() {
+        try {
+            // Create the Mobile Service Client instance, using the provided
+
+            // Mobile Service URL and key
+            mClient = new MobileServiceClient(
+                    "https://elderfitness.azurewebsites.net",
+                    this);
+
+            // Extend timeout from default of 10s to 20s
+            mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {
+                @Override
+                public OkHttpClient createOkHttpClient() {
+                    OkHttpClient client = new OkHttpClient();
+                    client.setReadTimeout(20, TimeUnit.SECONDS);
+                    client.setWriteTimeout(20, TimeUnit.SECONDS);
+                    return client;
+                }
+            });
+
+            // Get the Mobile Service Table instance to use
+
+            mRecordTable = mClient.getTable(RecordTrack.class);
+        }catch (MalformedURLException e) {
+            createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+        } catch (Exception e){
+            createAndShowDialog(e, "Error");
+        }
     }
 
 

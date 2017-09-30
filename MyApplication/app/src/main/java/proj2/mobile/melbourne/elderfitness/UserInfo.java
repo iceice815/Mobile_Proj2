@@ -19,7 +19,7 @@ public class UserInfo {
     @com.google.gson.annotations.SerializedName("password")
     private String mPassword;
 
-    @com.google.gson.annotations.SerializedName("emergencynumber")
+    @com.google.gson.annotations.SerializedName("emergencyNumber")
     private String mEmergencyNumber;
 
 
@@ -33,10 +33,12 @@ public class UserInfo {
      * Overload
      * @param name
      * @param password
+     * @param emergencyNumber
      */
-    public UserInfo(String name,  String password){
+    public UserInfo(String name,  String password,String emergencyNumber){
         this.setmUsername(name);
         this.setmPassword(password);
+        this.setmEmergencyNumber(emergencyNumber);
     }
 
     /**

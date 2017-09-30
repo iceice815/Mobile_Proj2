@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.val;
 
-public class Register extends AppCompatActivity  {
+public class Register extends AppCompatActivity implements InitializeTable {
 
     private MobileServiceClient mClient;
     private MobileServiceTable<UserInfo> mUserTable;
@@ -58,33 +58,7 @@ public class Register extends AppCompatActivity  {
         mProgressDialog = initial_ProgressDialog();
         mAlertDialog = initial_AlertDialog();
 
-        try {
-            // Create the Mobile Service Client instance,
-            // using the provided Mobile Service URL and key
-            mClient = new MobileServiceClient(
-                    "https://elderfitness.azurewebsites.net",
-                    this);
-
-            // Extend timeout from default of 10s to 20s
-            mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {
-                @Override
-                public OkHttpClient createOkHttpClient() {
-                    OkHttpClient client = new OkHttpClient();
-                    client.setReadTimeout(20, TimeUnit.SECONDS);
-                    client.setWriteTimeout(20, TimeUnit.SECONDS);
-                    mProgressDialog.dismiss();       return client;
-                }
-            });
-
-            // Get the Mobile Service Table instance to use
-            mUserTable = mClient.getTable(UserInfo.class);
-
-        }catch (MalformedURLException e) {
-            createAndShowDialog(new Exception
-                    ("Error in creating Mobile Service. Verify the URL"), "Error");
-        } catch (Exception e){
-            createAndShowDialog(e, "Error");
-        }
+       init_table();
 
         //sign_up button event
         sign_up.setOnClickListener(new View.OnClickListener() {
@@ -274,5 +248,36 @@ public class Register extends AppCompatActivity  {
         });
 
         return dialog;
+    }
+
+    @Override
+    public void init_table() {
+        try {
+            // Create the Mobile Service Client instance,
+            // using the provided Mobile Service URL and key
+            mClient = new MobileServiceClient(
+                    "https://elderfitness.azurewebsites.net",
+                    this);
+
+            // Extend timeout from default of 10s to 20s
+            mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {
+                @Override
+                public OkHttpClient createOkHttpClient() {
+                    OkHttpClient client = new OkHttpClient();
+                    client.setReadTimeout(20, TimeUnit.SECONDS);
+                    client.setWriteTimeout(20, TimeUnit.SECONDS);
+                    mProgressDialog.dismiss();       return client;
+                }
+            });
+
+            // Get the Mobile Service Table instance to use
+            mUserTable = mClient.getTable(UserInfo.class);
+
+        }catch (MalformedURLException e) {
+            createAndShowDialog(new Exception
+                    ("Error in creating Mobile Service. Verify the URL"), "Error");
+        } catch (Exception e){
+            createAndShowDialog(e, "Error");
+        }
     }
 }

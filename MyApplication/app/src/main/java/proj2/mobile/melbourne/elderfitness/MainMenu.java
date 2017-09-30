@@ -23,8 +23,8 @@ public class MainMenu extends AppCompatActivity {
         virtialization_button = (Button)findViewById(R.id.ButtonVir);
 
         Intent rec_intent = getIntent();
-        username = rec_intent.getStringExtra("username");
         emgergency_number = rec_intent.getStringExtra("Emergency_Number");
+        username = rec_intent.getStringExtra("username");
         run_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

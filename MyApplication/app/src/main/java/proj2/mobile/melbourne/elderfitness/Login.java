@@ -20,12 +20,13 @@ import java.util.concurrent.ExecutionException;
 
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.*;
 
-public class Login extends AppCompatActivity {
+public class Login extends AppCompatActivity implements InitializeTable{
     private Button mRegister;
     private Button mLogin;
     private EditText mUsername;
     private EditText mPassword;
     private ProgressBar mProgressBar;
+    private String emergency_number;
 
     private MobileServiceClient mClient;
     private MobileServiceTable<UserInfo> mUserInfoTable;
@@ -45,14 +46,7 @@ public class Login extends AppCompatActivity {
 
         mProgressBar = (ProgressBar) findViewById(R.id.LoginProgressBar);
 
-        try {
-            //get a client of the referred database
-            mClient = new MobileServiceClient("https://elderfitness.azurewebsites.net", this);
-            //get the table of the database
-            mUserInfoTable = mClient.getTable(UserInfo.class);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        init_table();
 
 
         mRegister.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +99,8 @@ public class Login extends AppCompatActivity {
                                     //if the password is correct, then transfer to the operation interface
 //                                    Intent intent1 = new Intent(Login.this, RunningTrack.class);
                                     Intent intent1 = new Intent(Login.this, MainMenu.class);
-                                    intent1.putExtra("Emergency_Number",info.getmEmergencyNumber());
+                                    emergency_number =info.getmEmergencyNumber();
+                                    intent1.putExtra("Emergency_Number",emergency_number);
                                     intent1.putExtra("username",username);
 
                                     startActivity(intent1);
@@ -148,4 +143,15 @@ public class Login extends AppCompatActivity {
     }
 
 
+    @Override
+    public void init_table() {
+        try {
+            //get a client of the referred database
+            mClient = new MobileServiceClient("https://elderfitness.azurewebsites.net", this);
+            //get the table of the database
+            mUserInfoTable = mClient.getTable(UserInfo.class);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -9,32 +9,80 @@
         android:id="@+id/mapID"
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="530dp"
+        android:layout_height="380dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
     <LinearLayout
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#AFEEEE"
+        android:layout_below="@+id/mapID"
+        android:layout_above="@+id/layout"
+        android:weightSum="1">
+        <TextView
+            android:id="@+id/NameID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_gravity="center"
+            android:text="0"
+            android:textSize="20dp"/>
+        <ImageView
+            android:layout_marginLeft="40dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_distance"
+            android:layout_weight="0.01" />
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="0 km"
+            android:textSize="20dp"
+            android:id="@+id/DistanceID" />
+        <ImageView
+            android:layout_marginLeft="30dp"
+            android:paddingBottom="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_clock"/>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00:00"
+            android:layout_gravity="center"
+            android:id="@+id/ClockCountID"
+
+            android:textSize="15dp"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout"
         android:padding="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="#AFEEEE"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
-    <TextView
-        android:id="@+id/NameID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:text="0"/>
+        android:layout_alignParentStart="true"
+        android:weightSum="1">
+
     <proj2.mobile.melbourne.elderfitness.FtoggleButton
         android:id="@+id/ToggleID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textOff="Start"
         android:textOn="Stop"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
 
-        android:layout_marginLeft="90dp"/>
+        android:layout_marginLeft="25dp"
+    />
     <proj2.mobile.melbourne.elderfitness.FButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,7 +90,15 @@
         android:text="Record"
         android:layout_alignParentRight="true"
 
-        android:layout_marginLeft="70dp"/>
+        android:layout_marginLeft="25dp"/>
+        <proj2.mobile.melbourne.elderfitness.FButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/EmergencyID"
+            android:text="Emergency"
+            android:layout_alignParentRight="true"
+
+            android:layout_marginLeft="25dp"/>
     </LinearLayout>
 
 </RelativeLayout>

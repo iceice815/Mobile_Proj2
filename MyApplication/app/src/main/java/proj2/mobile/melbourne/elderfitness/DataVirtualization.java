@@ -35,7 +35,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.val;
 
-public class DataVirtualization extends AppCompatActivity {
+public class DataVirtualization extends AppCompatActivity implements InitializeTable{
     private PieChart pie_chart1;
     private PieChart pie_chart2;
     private BarChart bar_distance_chart;
@@ -238,7 +238,8 @@ public class DataVirtualization extends AppCompatActivity {
         return theDates;
     }
 
-    private void init_table(){
+    @Override
+    public void init_table(){
         try {
             mClient = new MobileServiceClient("https://elderfitness.azurewebsites.net", this);
             mUserInfoTable = mClient.getTable(RecordTrack.class);
