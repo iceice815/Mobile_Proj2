@@ -23,7 +23,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"
         android:gravity="center"
-        android:text="@string/signature"
+        android:text="@string/title"
         android:textColor="@android:color/white"
         android:textSize="23sp"/>
 

@@ -73,7 +73,7 @@
         android:layout_alignParentStart="true"
         android:weightSum="1">
 
-    <proj2.mobile.melbourne.elderfitness.FtoggleButton
+    <proj2.mobile.melbourne.elderfitness.widget.FtoggleButton
         android:id="@+id/ToggleID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
 
         android:layout_marginLeft="25dp"
     />
-    <proj2.mobile.melbourne.elderfitness.FButton
+    <proj2.mobile.melbourne.elderfitness.widget.FButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/RecordID"
@@ -91,7 +91,7 @@
         android:layout_alignParentRight="true"
 
         android:layout_marginLeft="25dp"/>
-        <proj2.mobile.melbourne.elderfitness.FButton
+        <proj2.mobile.melbourne.elderfitness.widget.FButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/EmergencyID"

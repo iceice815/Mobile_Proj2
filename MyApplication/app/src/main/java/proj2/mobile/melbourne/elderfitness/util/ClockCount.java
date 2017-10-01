@@ -1,4 +1,4 @@
-package proj2.mobile.melbourne.elderfitness;
+package proj2.mobile.melbourne.elderfitness.util;
 
 import android.util.Log;
 
@@ -54,7 +54,4 @@ public class ClockCount {
         minite=0;
         hour=0;
     }
-
-
-
 }

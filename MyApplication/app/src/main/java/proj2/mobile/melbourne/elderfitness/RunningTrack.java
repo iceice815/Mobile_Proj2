@@ -1,7 +1,6 @@
 package proj2.mobile.melbourne.elderfitness;
 
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,12 +51,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import proj2.mobile.melbourne.elderfitness.data.RecordTrack;
+import proj2.mobile.melbourne.elderfitness.util.ClockCount;
+import proj2.mobile.melbourne.elderfitness.util.CurrentLocationListener;
+import proj2.mobile.melbourne.elderfitness.util.GetGPS;
+import proj2.mobile.melbourne.elderfitness.util.InitializeTable;
+
 import static android.hardware.SensorManager.getAltitude;
-import static proj2.mobile.melbourne.elderfitness.DistanceCalculation.getDistanceFromLocations;
+import static proj2.mobile.melbourne.elderfitness.util.DistanceCalculation.getDistanceFromLocations;
 /**
  * Created by iceice on 9/12/17.
  */
-public class RunningTrack extends AppCompatActivity implements OnMapReadyCallback, InitializeTable{
+public class RunningTrack extends AppCompatActivity implements OnMapReadyCallback, InitializeTable {
 
     private MobileServiceClient mClient;
     private MobileServiceTable<RecordTrack> mRecordTable;

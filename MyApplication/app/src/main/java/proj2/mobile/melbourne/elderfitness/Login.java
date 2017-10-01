@@ -18,9 +18,12 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import proj2.mobile.melbourne.elderfitness.data.UserInfo;
+import proj2.mobile.melbourne.elderfitness.util.InitializeTable;
+
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.*;
 
-public class Login extends AppCompatActivity implements InitializeTable{
+public class Login extends AppCompatActivity implements InitializeTable {
     private Button mRegister;
     private Button mLogin;
     private EditText mUsername;

@@ -1,9 +1,11 @@
-package proj2.mobile.melbourne.elderfitness;
+package proj2.mobile.melbourne.elderfitness.util;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
+
+import proj2.mobile.melbourne.elderfitness.util.CurrentLocationListener;
 
 /**
  * Created by iceice on 1/10/17.
