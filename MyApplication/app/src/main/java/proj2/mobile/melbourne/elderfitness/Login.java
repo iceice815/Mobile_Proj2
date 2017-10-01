@@ -120,6 +120,7 @@ public class Login extends AppCompatActivity implements InitializeTable{
                                 toast.show();
                                 mUsername.setText("");
                                 mPassword.setText("");
+                                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                             }
                         }
                     });

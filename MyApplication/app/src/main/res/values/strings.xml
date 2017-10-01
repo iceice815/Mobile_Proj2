@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ElderFitness</string>
+    <string name="signature">YuchenQ</string>
+    <string name="entry">立即体验</string>
 </resources>

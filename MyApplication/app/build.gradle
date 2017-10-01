@@ -37,8 +37,14 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     compile 'com.microsoft.azure:azure-mobile-android:3.2.0@aar'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.1.0'
     testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
+
+
 
 
 apply plugin: 'com.google.gms.google-services'
