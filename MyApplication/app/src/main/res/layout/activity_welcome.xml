@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/welcomimg1"/>
+        android:src="@drawable/welcomimg5"/>
 
     <!--在ImageView上覆盖一个View，该View用渐变色背景welcomimg_bg.xml以暗化图片-->
     <View
