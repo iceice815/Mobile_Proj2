@@ -23,7 +23,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import proj2.mobile.melbourne.elderfitness.data.UserInfo;
+import proj2.mobile.melbourne.elderfitness.dto.UserInfo;
 import proj2.mobile.melbourne.elderfitness.util.InitializeTable;
 
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.val;

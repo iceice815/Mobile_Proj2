@@ -51,11 +51,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import proj2.mobile.melbourne.elderfitness.data.RecordTrack;
+import proj2.mobile.melbourne.elderfitness.dto.RecordTrack;
 import proj2.mobile.melbourne.elderfitness.util.ClockCount;
 import proj2.mobile.melbourne.elderfitness.util.CurrentLocationListener;
 import proj2.mobile.melbourne.elderfitness.util.GetGPS;
 import proj2.mobile.melbourne.elderfitness.util.InitializeTable;
+import proj2.mobile.melbourne.elderfitness.util.MyTimerTask;
 
 import static android.hardware.SensorManager.getAltitude;
 import static proj2.mobile.melbourne.elderfitness.util.DistanceCalculation.getDistanceFromLocations;
@@ -83,6 +84,7 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
     private Timer timer1 = new Timer();
     private Timer timer2 = new Timer();
     private Timer timer3 = new Timer();
+    private MyTimerTask mtt;
     private static final int DANGEROUS_DISTANCE=30;
     private int temp_distance;
     private SensorManager mSensorManager;
@@ -212,22 +214,27 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
     private void start_auto_safety(Timer timer3){
-
-        timer3.schedule(new TimerTask() {
+        timer3.schedule(new MyTimerTask() {
             @Override
             public void run() {
-                int current_distance = getDistanceFromLocations(locations);
-                if(current_distance-temp_distance<=DANGEROUS_DISTANCE){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            send_sms_to_familymember();
-                        }
-                    });
+                if(this.getCnt()==0){
+                    this.setCnt(1);
+                }else{
+                    int current_distance = getDistanceFromLocations(locations);
+                    if(current_distance-this.getLast_distance()<=DANGEROUS_DISTANCE){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                send_sms_to_familymember();
+                            }
+                        });
+                        this.setLast_distance(current_distance);
+                    }else{
+                        this.setLast_distance(current_distance);
+                    }
                 }
-                temp_distance =current_distance;
             }
-        },0,180000);
+        }, 0 , 20000);
     }
     private void stop_auto_safety(Timer timer3){
         timer3.cancel();

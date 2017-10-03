@@ -42,7 +42,7 @@
             android:orientation="horizontal">
             <com.github.mikephil.charting.charts.PieChart
                 android:layout_width="180dp"
-                android:layout_height="180dp"
+                android:layout_height="125dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:layout_centerHorizontal="true"
@@ -51,8 +51,9 @@
             </com.github.mikephil.charting.charts.PieChart>
             <com.github.mikephil.charting.charts.PieChart
                 android:layout_width="180dp"
-                android:layout_height="180dp"
+                android:layout_height="125dp"
                 android:layout_gravity="center"
+                android:layout_marginLeft="50dp"
                 android:layout_margin="10dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"

@@ -1,7 +1,8 @@
-package proj2.mobile.melbourne.elderfitness.data;
+package proj2.mobile.melbourne.elderfitness.dto;
 
 /**
  * Created by iceice on 9/9/17.
+ * DATA transfer object
  */
 
 public class UserInfo {

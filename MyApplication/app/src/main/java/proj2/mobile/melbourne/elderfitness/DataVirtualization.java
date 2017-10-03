@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
-import proj2.mobile.melbourne.elderfitness.data.RecordTrack;
+import proj2.mobile.melbourne.elderfitness.dto.RecordTrack;
 import proj2.mobile.melbourne.elderfitness.util.InitializeTable;
 
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.val;
