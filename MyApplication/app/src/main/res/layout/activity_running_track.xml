@@ -89,8 +89,9 @@
         android:id="@+id/RecordID"
         android:text="Record"
         android:layout_alignParentRight="true"
-
         android:layout_marginLeft="25dp"/>
+
+
         <proj2.mobile.melbourne.elderfitness.widget.FButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
