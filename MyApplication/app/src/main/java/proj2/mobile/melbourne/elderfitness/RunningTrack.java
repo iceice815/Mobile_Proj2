@@ -84,9 +84,7 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
     private Timer timer1 = new Timer();
     private Timer timer2 = new Timer();
     private Timer timer3 = new Timer();
-    private MyTimerTask mtt;
     private static final int DANGEROUS_DISTANCE=30;
-    private int temp_distance;
     private SensorManager mSensorManager;
     private LocationManager mLocationManager;
     private Sensor mPressure;
@@ -234,7 +232,7 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 }
             }
-        }, 0 , 20000);
+        }, 0 , 180000);
     }
     private void stop_auto_safety(Timer timer3){
         timer3.cancel();
