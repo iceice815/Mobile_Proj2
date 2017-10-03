@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total calori"
+        android:text="Total calori of this week"
         android:id="@+id/textView3"
         android:layout_marginTop="36dp"
         android:layout_alignParentTop="true"
@@ -18,28 +18,41 @@
         android:id="@+id/totdistance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
         android:textStyle="bold"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="23dp" />
+        android:textColor="#874423"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="average calori"
+        android:text="average calori of this week"
         android:id="@+id/textView4"
         android:textStyle="bold"
-        android:layout_below="@+id/textView3"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="73dp" />
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/totdistance"
+        android:layout_alignParentStart="true" />
     <TextView
         android:id="@+id/avgdistance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/textView4"
         android:textStyle="bold"
+        android:textColor="#874423"
         android:layout_alignParentStart="true"
         android:layout_marginTop="51dp" />
+
+    <TextView
+        android:id="@+id/mark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#432387"
+        android:text="Wish you a good day!"
+        android:layout_below="@+id/avgdistance"
+        android:layout_alignParentStart="true"
+        android:textSize="35dp"
+        android:layout_marginTop="46dp" />
 
     <proj2.mobile.melbourne.elderfitness.widget.FButton
         android:id="@+id/ButtonRun"

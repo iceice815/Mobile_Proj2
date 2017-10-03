@@ -149,16 +149,6 @@ public class MainMenu extends AppCompatActivity {
                     show_total(total);
                     show_avg(avg);
 
-
-
-
-
-                    Log.i("total",total_calori[0]+"total");
-                    Log.i("total",avg_calori[0]+"avg");
-
-//                    total_Calori.setText(total_calori[0]);
-
-
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -181,7 +171,7 @@ public class MainMenu extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            total_Calori.setText(total[0]);
+                            total_Calori.setText(total[0]+" Cal");
                         }
                     });
                     return null;
@@ -198,7 +188,8 @@ public class MainMenu extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        avg_Calori.setText(avg[0]);
+                        avg_Calori.setText(avg[0]+" Cal");
+
                     }
                 });
                 return null;
