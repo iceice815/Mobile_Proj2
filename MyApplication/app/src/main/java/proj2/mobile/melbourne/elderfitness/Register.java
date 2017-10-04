@@ -254,6 +254,9 @@ public class Register extends AppCompatActivity implements InitializeTable {
         return dialog;
     }
 
+    /**
+     * initilize table
+     */
     @Override
     public void init_table() {
         try {

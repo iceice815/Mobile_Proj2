@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 /**
  * Created by iceice on 1/10/17.
+ * This CurrentLocationListenser implements LocationListener in order to
+ * request current location latitude and longitude
  */
 
 public class CurrentLocationListener implements LocationListener {

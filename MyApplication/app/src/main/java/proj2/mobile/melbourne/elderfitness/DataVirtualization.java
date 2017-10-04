@@ -120,10 +120,11 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
                                     temp_colories = temp_colories + this_week_result.getmColories();
                                 }
                         }
-
-                        xEntrys1.add(mon_to_sun.get(i));
-                        yEntrys1.add(new PieEntry((float)temp_colories,i));
-                        colors1.add(mon_to_sun_colors.get(i));
+                        if(temp_colories>0) {
+                            xEntrys1.add(mon_to_sun.get(i));
+                            yEntrys1.add(new PieEntry((float) temp_colories, i));
+                            colors1.add(mon_to_sun_colors.get(i));
+                        }
 
                     }
                     pieDataSet1 = new PieDataSet(yEntrys1,"Weekly Calories");
@@ -198,6 +199,11 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
 
     }
 
+    /**
+     * A filter for getting today's results
+     * @param results
+     * @return
+     */
     private List<RecordTrack> get_today_results(List<RecordTrack> results){
         List<RecordTrack> today_results =new ArrayList<>();
         String today = get_today_date();
@@ -230,6 +236,10 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
         return today_to_string;
     }
 
+    /**
+     * initilize an ArrayList contains dates
+     * @return
+     */
     private ArrayList<String> get_mon_to_sun(){
         ArrayList<String> theDates=new ArrayList<>();
         theDates.add("Mon");
@@ -242,6 +252,9 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
         return theDates;
     }
 
+    /**
+     * initilize table
+     */
     @Override
     public void init_table(){
         try {
@@ -598,6 +611,11 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
 
     }
 
+    /**
+     * A method that given today's date and then get this week's date,
+     * which has an significant function in realize data virtualization
+     * @return
+     */
     private ArrayList<String> get_week_list(){
         ArrayList<String> list = new ArrayList<>();
         Date date = new Date();
@@ -672,7 +690,11 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
         return list;
     }
 
-
+    /**
+     * get today's date
+     * @param cld
+     * @return
+     */
     private String getDate(Calendar cld){
         String curDate = cld.get(Calendar.YEAR)+"/"+(cld.get(Calendar.MONTH)+1)+"/"
                 +cld.get(Calendar.DAY_OF_MONTH);
@@ -685,6 +707,10 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
         return curDate;
     }
 
+    /**
+     * give each date with a color for better data virtualization
+     * @return
+     */
     private ArrayList<Integer> get_mon_to_sun_colors() {
         ArrayList<Integer> theColors = new ArrayList<>();
         theColors.add(Color.RED);
@@ -697,6 +723,14 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
         return theColors;
     }
 
+    /**
+     * Similar to Select*From ***.table where username ="xxxx"
+     * @param Username
+     * @return
+     * @throws ExecutionException
+     * @throws InterruptedException
+     * @throws MobileServiceException
+     */
     private List<RecordTrack> get_items_from_table(String Username) throws ExecutionException, InterruptedException, MobileServiceException {
         //return a item list which has the same username with the user input
         return mUserInfoTable.where().field("username").eq(val(Username)).execute().get();

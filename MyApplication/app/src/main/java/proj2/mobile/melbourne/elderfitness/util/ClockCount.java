@@ -4,6 +4,8 @@ import android.util.Log;
 
 /**
  * Created by iceice on 30/9/17.
+ * ClockCount class is create for similate real clock
+ * that could real time update the time on UI combine with TimerTask
  */
 
 public class ClockCount {

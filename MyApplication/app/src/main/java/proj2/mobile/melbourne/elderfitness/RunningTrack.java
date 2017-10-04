@@ -150,6 +150,10 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
+
+    /**
+     * invoke SMSManager to send message to user's family member
+     */
     private void send_sms_to_familymember(){
          //send sms
         if(currentLocationListener.getCurrent_location()!=null){
@@ -170,7 +174,9 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-
+    /**
+     * Toogle for start running and stop running
+     */
     private class ToogleLisener implements CompoundButton.OnCheckedChangeListener{
         NewLocationListener location_listener =new NewLocationListener();
         @Override
@@ -211,6 +217,11 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
+
+    /**
+     * TimerTask for automatic safety mechanism to ensure elder's safety
+     * @param timer3
+     */
     private void start_auto_safety(Timer timer3){
         timer3.schedule(new MyTimerTask() {
             @Override
@@ -234,6 +245,11 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
             }
         }, 0 , 180000);
     }
+
+    /**
+     * stop TimerTask for automatic safety mechanism
+     * @param timer3
+     */
     private void stop_auto_safety(Timer timer3){
         timer3.cancel();
     }
@@ -260,6 +276,11 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
+
+    /**
+     * Stop TimerTask for realtime update timecount
+     * @param timer
+     */
     private void stop_clock_count(Timer timer ){
         timer.cancel();
         clockCount.clear();
@@ -270,6 +291,11 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
+    /**
+     * Start TimerTask for realtime update timecount
+     * @param timer
+     */
     private void start_clock_count(Timer timer){
         timer.schedule(new TimerTask() {
             @Override
@@ -287,6 +313,11 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
+
+    /**
+     * invoke GPS service
+     * @param location_listener
+     */
     private void get_GPS(NewLocationListener location_listener){
         //get locationManager object, bind lisener
          mLocationManager = (LocationManager) RunningTrack.this.getSystemService(Context.LOCATION_SERVICE);
@@ -523,6 +554,9 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    /**
+     * initialize google map
+     */
 
     private void init_Map(){
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapID);
@@ -534,6 +568,77 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
     }
 
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(mPressureListener, mPressure,
+                SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    /**
+     * invoke Google service by use geocoder to get the user's address with
+     * input parameter latitude and longitude
+     * @param ctx
+     * @param lat
+     * @param lng
+     * @return
+     */
+    public String get_address(Context ctx, double lat, double lng){
+        String full_adrress = null;
+        try{
+            Geocoder geocoder = new Geocoder(ctx, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(lat,lng,1);
+            if(addresses.size()>0){
+                Address address = addresses.get(0);
+                String addr = address.getAddressLine(0);
+                String area = address.getLocality();
+                String city = address.getAdminArea();
+                String country = address.getCountryName();
+                String postalcode =address.getPostalCode();
+                full_adrress=addr+", "+area+", "+city+", "+country+", "+postalcode;
+            }
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return full_adrress;
+    }
+
+    /**
+     * initialize table
+     */
+    @Override
+    public void init_table() {
+        try {
+            // Create the Mobile Service Client instance, using the provided
+
+            // Mobile Service URL and key
+            mClient = new MobileServiceClient(
+                    "https://elderfitness.azurewebsites.net",
+                    this);
+
+            // Extend timeout from default of 10s to 20s
+            mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {
+                @Override
+                public OkHttpClient createOkHttpClient() {
+                    OkHttpClient client = new OkHttpClient();
+                    client.setReadTimeout(20, TimeUnit.SECONDS);
+                    client.setWriteTimeout(20, TimeUnit.SECONDS);
+                    return client;
+                }
+            });
+
+            // Get the Mobile Service Table instance to use
+
+            mRecordTable = mClient.getTable(RecordTrack.class);
+        }catch (MalformedURLException e) {
+            createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
+        } catch (Exception e){
+            createAndShowDialog(e, "Error");
+        }
+    }
 
     /*********************************************************************************
      ********************************you can ignore it********************************
@@ -571,64 +676,4 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
         builder.setTitle(title);
         builder.create().show();
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mSensorManager.registerListener(mPressureListener, mPressure,
-                SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-//
-    public String get_address(Context ctx, double lat, double lng){
-        String full_adrress = null;
-        try{
-            Geocoder geocoder = new Geocoder(ctx, Locale.getDefault());
-            List<Address> addresses = geocoder.getFromLocation(lat,lng,1);
-            if(addresses.size()>0){
-                Address address = addresses.get(0);
-                String addr = address.getAddressLine(0);
-                String area = address.getLocality();
-                String city = address.getAdminArea();
-                String country = address.getCountryName();
-                String postalcode =address.getPostalCode();
-                full_adrress=addr+", "+area+", "+city+", "+country+", "+postalcode;
-            }
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return full_adrress;
-    }
-    @Override
-    public void init_table() {
-        try {
-            // Create the Mobile Service Client instance, using the provided
-
-            // Mobile Service URL and key
-            mClient = new MobileServiceClient(
-                    "https://elderfitness.azurewebsites.net",
-                    this);
-
-            // Extend timeout from default of 10s to 20s
-            mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {
-                @Override
-                public OkHttpClient createOkHttpClient() {
-                    OkHttpClient client = new OkHttpClient();
-                    client.setReadTimeout(20, TimeUnit.SECONDS);
-                    client.setWriteTimeout(20, TimeUnit.SECONDS);
-                    return client;
-                }
-            });
-
-            // Get the Mobile Service Table instance to use
-
-            mRecordTable = mClient.getTable(RecordTrack.class);
-        }catch (MalformedURLException e) {
-            createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
-        } catch (Exception e){
-            createAndShowDialog(e, "Error");
-        }
-    }
-
-
 }
