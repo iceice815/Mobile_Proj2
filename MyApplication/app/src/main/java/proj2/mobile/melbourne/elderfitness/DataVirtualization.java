@@ -350,6 +350,7 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
                             barEntries.add(new BarEntry(i, run_distance.get(i)));
                         }
                         BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
+                        barDataSet.setColor(Color.GRAY);
                         BarData theData = new BarData(barDataSet);
                         bar_distance_chart.setData(theData);
                         bar_distance_chart.setTouchEnabled(true);
@@ -359,6 +360,7 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
                         Description ds = new Description();
                         ds.setText("Weekly Running Distance");
                         bar_distance_chart.setDescription(ds);
+
                     }
                 });
                 return null;
@@ -464,6 +466,7 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
                             barEntries.add(new BarEntry(i, run_distance.get(i)));
                         }
                         BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
+                        barDataSet.setColor(Color.GRAY);
                         BarData theData = new BarData(barDataSet);
                         bar_flight_chart.setData(theData);
                         bar_flight_chart.setTouchEnabled(true);
@@ -575,6 +578,7 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
                             barEntries.add(new BarEntry(i, run_distance.get(i)));
                         }
                         BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
+                        barDataSet.setColor(Color.GRAY);
                         BarData theData = new BarData(barDataSet);
                         bar_calorie_chart.setData(theData);
                         bar_calorie_chart.setTouchEnabled(true);
