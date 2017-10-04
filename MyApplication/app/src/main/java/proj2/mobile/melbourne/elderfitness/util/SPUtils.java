@@ -6,15 +6,10 @@ import android.content.SharedPreferences;
 import java.util.Map;
 
 public class SPUtils {
-    /**
-     * 保存在手机里的SP文件名
-     */
+
     public static final String FILE_NAME = "my_sp";
     public static final String FIRST_OPEN = "first_open";
 
-    /**
-     * 保存数据
-     */
     public static void put(Context context, String key, Object obj) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -32,9 +27,6 @@ public class SPUtils {
         editor.commit();
     }
 
-    /**
-     * 获取指定数据
-     */
     public static Object get(Context context, String key, Object defaultObj) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
         if (defaultObj instanceof Boolean) {
@@ -51,9 +43,6 @@ public class SPUtils {
         return null;
     }
 
-    /**
-     * 删除指定数据
-     */
     public static void remove(Context context, String key) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -61,18 +50,12 @@ public class SPUtils {
         editor.commit();
     }
 
-    /**
-     * 返回所有键值对
-     */
     public static Map<String, ?> getAll(Context context) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
         Map<String, ?> map = sp.getAll();
         return map;
     }
 
-    /**
-     * 删除所有数据
-     */
     public static void clear(Context context) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -80,9 +63,6 @@ public class SPUtils {
         editor.commit();
     }
 
-    /**
-     * 检查key对应的数据是否存在
-     */
     public static boolean contains(Context context, String key) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME, context.MODE_PRIVATE);
         return sp.contains(key);

@@ -45,11 +45,7 @@ public class WelcomeActivity extends Activity {
     }
 
     private void startMainActivity(){
-        // elapsedRealtime() 从开机到现在的毫秒数
-//        Random random = new Random(SystemClock.elapsedRealtime());
-//        mIVEntry.setImageResource(Imgs[random.nextInt(Imgs.length)]);
 
-        // timer: 延迟执行某个操作，第一个参数表示延迟时间，第二个参数是时间单位
         Observable.timer(1000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Long>() {
@@ -84,9 +80,6 @@ public class WelcomeActivity extends Activity {
         });
     }
 
-    /**
-     * 屏蔽物理返回按钮
-     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return keyCode==KeyEvent.KEYCODE_BACK || super.onKeyDown(keyCode, event);

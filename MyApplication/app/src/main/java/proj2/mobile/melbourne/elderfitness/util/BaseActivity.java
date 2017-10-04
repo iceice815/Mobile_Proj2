@@ -4,9 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-/**
- * 通过这个类让所有活动继承，来知道当前界面对应的是那个活动
- */
+
 public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle saveInstanceState){
