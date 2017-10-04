@@ -84,7 +84,7 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
     private Timer timer1 = new Timer();
     private Timer timer2 = new Timer();
     private Timer timer3 = new Timer();
-    private static final int DANGEROUS_DISTANCE=30;
+    private static final int DANGEROUS_DISTANCE=100;
     private SensorManager mSensorManager;
     private LocationManager mLocationManager;
     private Sensor mPressure;
@@ -478,11 +478,11 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
                     tempAltitude = Altitude;
                     cnt++;
                 }
-                if ((Altitude - tempAltitude) >= 2) {
+                if ((Altitude - tempAltitude) >= 0.3) {
                     tempAltitude = Altitude;
                     upAltitude=upAltitude+2;
                 }
-                if ((Altitude - tempAltitude) <= -2) {
+                if ((Altitude - tempAltitude) <= -0.3) {
                     tempAltitude = Altitude;
                     downAltitude=downAltitude+2;
                 }
