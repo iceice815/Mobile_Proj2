@@ -11,7 +11,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/run_elder"
+        android:src="@drawable/elder_login"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
