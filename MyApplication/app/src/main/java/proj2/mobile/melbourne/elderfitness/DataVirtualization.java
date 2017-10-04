@@ -266,6 +266,11 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
 
     }
 
+    /**
+     * A method that retrieve the distance data from the database by
+     * using the username input by the user
+     */
+
 
     public void print_distance_bar_chart(){
         final List<Integer> run_distance = new ArrayList<>();
@@ -283,14 +288,17 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
 
                 try {
                     final List<RecordTrack> results = get_items_from_table(username);
+                    //get all the data of the same user.
 
                     ArrayList<String> date_list = get_week_list();
+                    //get all the date of this week
 
                     Map<String,Integer> map=new HashMap<String,Integer>();
                     for(RecordTrack infor:results){
                         if(map.containsKey(infor.getmDate())){
                             int temp_distance = map.get(infor.getmDate());
                             map.put(infor.getmDate(),temp_distance+infor.getmDistance());
+                            //put all the distance data of this week into map
                         }
                         else {
                             map.put(infor.getmDate(), infor.getmDistance());
@@ -306,6 +314,7 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
                     for(int i = 0;i<date_list.size();i++){
                         if(map.containsKey(date_list.get(i))){
                             map_this_week.put(i,map.get(date_list.get(i)));
+                            //sort the data of this week by the week days
                         }
                         else
                             map_this_week.put(i,0);
@@ -315,6 +324,7 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
 
                     for (int i = 0;i<date_list.size();i++){
                         run_distance.add(map_this_week.get(i));
+                        //add all the data of the map into the distance list
                     }
 
 
@@ -344,9 +354,17 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
         bar_distance_chart.setScaleEnabled(true);
         XAxis xAxis =bar_distance_chart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(mon_to_sun));
+        //initial the barchart
+
         Refresh_distance_Chart(run_distance);
 
     }
+
+    /**
+     * A method that use the distance data retrieve from the database
+     * and show them in the barchart
+     * @param run_distance
+     */
 
     public void Refresh_distance_Chart(final List<Integer> run_distance){
         bar_distance_chart = (BarChart)findViewById(R.id.DistanceBarID);
@@ -384,6 +402,11 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
         xAxis.setValueFormatter(new IndexAxisValueFormatter(mon_to_sun));
 
     }
+
+    /**
+     * A method that retrieve the flight data from the database by
+     * using the username input by the user
+     */
 
     public void print_flight_bar_chart(){
         final List<Integer> climb_distance = new ArrayList<>();
@@ -464,6 +487,12 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
 
     }
 
+    /**
+     * A method that use the flight data retrieve from the database
+     * and show them in the barchart
+     * @param run_distance
+     */
+
     public void Refresh_flight_Chart(final List<Integer> run_distance){
         bar_flight_chart = (BarChart)findViewById(R.id.FightsClimbedBarID);
         final ArrayList<BarEntry> barEntries = new ArrayList<>();
@@ -477,6 +506,7 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
                     public void run() {
                         for(int i = 0;i<run_distance.size();i++){
                             barEntries.add(new BarEntry(i, run_distance.get(i)));
+                            //add data into the barchart
                         }
                         BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
                         barDataSet.setColor(Color.GRAY);
@@ -499,6 +529,12 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
         xAxis.setValueFormatter(new IndexAxisValueFormatter(mon_to_sun));
 
     }
+
+
+    /**
+     * A method that retrieve the calori data from the database by
+     * using the username input by the user
+     */
     public void print_calorie_bar_chart(){
         final List<Float> calorie = new ArrayList<>();
 
@@ -575,6 +611,12 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
         Refresh_calorie_Chart(calorie);
 
     }
+
+    /**
+     * A method that use the calori data retrieve from the database
+     * and show them in the barchart
+     * @param run_distance
+     */
     public void Refresh_calorie_Chart(final List<Float> run_distance){
         bar_calorie_chart = (BarChart)findViewById(R.id.CaloriesBarID);
         final ArrayList<BarEntry> barEntries = new ArrayList<>();

@@ -100,8 +100,7 @@ public class Login extends AppCompatActivity implements InitializeTable {
                             {
                                 if (info.getmPassword().equals(password)) {
                                     //if the password is correct, then transfer to the operation interface
-//                                    Intent intent1 = new Intent(Login.this, RunningTrack.class);
-                                    Intent intent1 = new Intent(Login.this, MainMenu.class);
+                                    Intent intent1 = new Intent(Login.this, RunningTrack.class);
                                     emergency_number =info.getmEmergencyNumber();
                                     intent1.putExtra("Emergency_Number",emergency_number);
                                     intent1.putExtra("username",username);
