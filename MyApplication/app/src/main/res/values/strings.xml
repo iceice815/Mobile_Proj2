@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">ElderFitness</string>
-    <string name="title">YuchenQ</string>
-    <string name="entry">立即体验</string>
+    <string name="title">ElderFitness</string>
+    <string name="entry">Start Now</string>
+    <string name="welcome">Welcome to elder fitness!</string>
+    <string name="intro1">This app can track your run</string>
+    <string name="intro2">And it show your weekly record</string>
+    <string name="intro3">Emergency call to keep you safe</string>
 </resources>

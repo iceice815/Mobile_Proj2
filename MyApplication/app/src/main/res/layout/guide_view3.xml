@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@mipmap/guide_img3" />
+        android:src="@drawable/welcomimg1" />
     <Button
         android:id="@+id/btn_enter"
         android:layout_width="126dp"
