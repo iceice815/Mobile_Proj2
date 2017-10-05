@@ -495,7 +495,7 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
      * @param run_distance
      */
 
-    public void Refresh_flight_Chart(final List<Integer> run_distance){
+    public void Refresh_flight_Chart(final List<Integer> climb_distance){
         bar_flight_chart = (BarChart)findViewById(R.id.FightsClimbedBarID);
         final ArrayList<BarEntry> barEntries = new ArrayList<>();
         new AsyncTask<Void,Void,Void>(){
@@ -506,8 +506,8 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        for(int i = 0;i<run_distance.size();i++){
-                            barEntries.add(new BarEntry(i, run_distance.get(i)));
+                        for(int i = 0;i<climb_distance.size();i++){
+                            barEntries.add(new BarEntry(i, climb_distance.get(i)));
                             //add data into the barchart
                         }
                         BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
@@ -619,7 +619,7 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
      * and show them in the barchart
      * @param run_distance
      */
-    public void Refresh_calorie_Chart(final List<Float> run_distance){
+    public void Refresh_calorie_Chart(final List<Float> calorie){
         bar_calorie_chart = (BarChart)findViewById(R.id.CaloriesBarID);
         final ArrayList<BarEntry> barEntries = new ArrayList<>();
         new AsyncTask<Void,Void,Void>(){
@@ -630,9 +630,9 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        for(int i = 0;i<run_distance.size();i++){
-                            float calories = (float)run_distance.get(i);
-                            barEntries.add(new BarEntry(i, run_distance.get(i)));
+                        for(int i = 0;i<calorie.size();i++){
+                            float calories = (float)calorie.get(i);
+                            barEntries.add(new BarEntry(i, calorie.get(i)));
                         }
                         BarDataSet barDataSet = new BarDataSet(barEntries,"Dates");
                         barDataSet.setColor(Color.GRAY);
