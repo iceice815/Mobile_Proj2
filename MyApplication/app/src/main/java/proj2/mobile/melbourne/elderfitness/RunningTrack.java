@@ -93,6 +93,7 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
 
     ArrayList<Location> locations = new ArrayList<Location>();
     private ClockCount clockCount = new ClockCount();
+    private boolean flag =false;
 
     private CurrentLocationListener currentLocationListener =new CurrentLocationListener();
 
@@ -146,7 +147,9 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
                 send_sms_to_familymember();
             }
         });
-
+        start_clock_count(timer1);
+        start_distance_count(timer2);
+        start_auto_safety(timer3);
 
 
     }
@@ -194,9 +197,8 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
                         .show();
                 get_barometer();
                 get_GPS(location_listener);
-                start_clock_count(timer1);
-                start_distance_count(timer2);
-                start_auto_safety(timer3);
+                flag = true;
+
             }
             else{
                 mToggle.setChecked(false);
@@ -211,9 +213,9 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
                         .create()
                         .show();
                 mLocationManager.removeUpdates(location_listener);
-                stop_clock_count(timer1);
-                stop_distance_count(timer2);
-                stop_auto_safety(timer3);
+                flag=false;
+                stop_clock_count();
+                stop_distance_count();
             }
         }
     }
@@ -226,35 +228,31 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
         timer3.schedule(new MyTimerTask() {
             @Override
             public void run() {
-                if(this.getCnt()==0){
-                    this.setCnt(1);
-                }else{
-                    int current_distance = getDistanceFromLocations(locations);
-                    if(current_distance-this.getLast_distance()<=DANGEROUS_DISTANCE){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                send_sms_to_familymember();
-                            }
-                        });
-                        this.setLast_distance(current_distance);
-                    }else{
-                        this.setLast_distance(current_distance);
+                if(flag==true) {
+                    if (this.getCnt() == 0) {
+                        this.setCnt(1);
+                    } else {
+                        int current_distance = getDistanceFromLocations(locations);
+                        if (current_distance - this.getLast_distance() <= DANGEROUS_DISTANCE) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    send_sms_to_familymember();
+                                }
+                            });
+                            this.setLast_distance(current_distance);
+                        } else {
+                            this.setLast_distance(current_distance);
+                        }
                     }
                 }
             }
         }, 0 , 180000);
     }
 
-    /**
-     * stop TimerTask for automatic safety mechanism
-     * @param timer3
-     */
-    private void stop_auto_safety(Timer timer3){
-        timer3.cancel();
-    }
-    private void stop_distance_count(Timer timer2){
-        timer2.cancel();
+
+
+    private void stop_distance_count(){
         mDistance.setText("0 km");
     }
     private void start_distance_count(Timer timer2){
@@ -262,15 +260,17 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
             double dis=0;
             @Override
             public void run() {
-                int distance = getDistanceFromLocations(locations);
-                dis = (double)distance/1000;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDistance.setText(String.format("%.1f", dis)+" km");
-                    }
-                });
+                if (flag == true) {
+                    int distance = getDistanceFromLocations(locations);
+                    dis = (double) distance / 1000;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDistance.setText(String.format("%.1f", dis) + " km");
+                        }
+                    });
 
+                }
             }
         },0,1000);
 
@@ -279,10 +279,8 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
 
     /**
      * Stop TimerTask for realtime update timecount
-     * @param timer
      */
-    private void stop_clock_count(Timer timer ){
-        timer.cancel();
+    private void stop_clock_count(){
         clockCount.clear();
         runOnUiThread(new Runnable() {
             @Override
@@ -300,14 +298,16 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                clockCount.start();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mClockCount.setText(clockCount.getTime());
-                    }
-                });
+                if (flag == true) {
+                    clockCount.start();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mClockCount.setText(clockCount.getTime());
+                        }
+                    });
 
+                }
             }
         },0,1000);
 
