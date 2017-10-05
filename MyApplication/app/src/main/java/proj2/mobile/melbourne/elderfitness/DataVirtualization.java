@@ -73,10 +73,12 @@ public class DataVirtualization extends AppCompatActivity implements InitializeT
         //set their property
         setPieChartProperty(pie_chart1);
         setPieChartProperty(pie_chart2);
+        //get the data of the distance and show them in the barchart
         print_distance_bar_chart();
+        //get the data of the flight and show then in the barchart
         print_flight_bar_chart();
+        //get the data of the calori and show them in the barchart
         print_calorie_bar_chart();
-
     }
     /**
      * set pie chart property
