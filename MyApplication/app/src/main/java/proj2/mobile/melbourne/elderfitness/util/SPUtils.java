@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 
 import java.util.Map;
 
+/**
+ * this class combine some get or set method from SharedPreferences
+ */
 public class SPUtils {
 
     public static final String FILE_NAME = "my_sp";

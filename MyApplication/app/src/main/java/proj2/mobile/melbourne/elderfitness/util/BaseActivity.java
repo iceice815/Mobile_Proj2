@@ -10,14 +10,12 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
         Log.d("BaseActivity", getClass().getSimpleName());
-        // 将正在创建的活动添加到 ActivityCollector 里面
         ActivityCollector.addActivity(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // 将一个马上要销毁的活动从 ActivityCollector 删除
         ActivityCollector.removeActivity(this);
     }
 }

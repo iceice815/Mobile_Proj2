@@ -10,7 +10,6 @@
         android:scaleType="fitXY"
         android:src="@drawable/welcomimg5"/>
 
-    <!--在ImageView上覆盖一个View，该View用渐变色背景welcomimg_bg.xml以暗化图片-->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,15 +24,6 @@
         android:gravity="center"
         android:text="@string/title"
         android:textColor="@android:color/white"
-        android:textSize="23sp"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/google_logo"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="60dp"
-        android:layout_centerInParent="true"
-        android:tint="@android:color/white" />
+        android:textSize="30sp"/>
 </RelativeLayout>
 
