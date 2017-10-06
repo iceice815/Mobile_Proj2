@@ -5,7 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="black">#dd000000</color>
     <color name="white">#ffffffff</color>
-<<<<<<< HEAD
     <color name="fbutton_default_color">#3eadeb</color>
     <color name="fbutton_default_shadow_color">#ff3493c8</color>
 //Color Swatches provided by http://designmodo.github.io/Flat-UI/
@@ -30,8 +29,7 @@
     <color name="fbutton_color_concrete">#95a5a6</color>
     <color name="fbutton_color_asbestos">#7f8c8d</color>
     <color name="fbutton_color_transparent">@android:color/transparent</color>
-=======
     <color name="grey">#696666</color>
->>>>>>> 10062
+
 </resources>
 

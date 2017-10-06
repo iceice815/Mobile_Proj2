@@ -509,11 +509,11 @@ public class RunningTrack extends AppCompatActivity implements OnMapReadyCallbac
                     tempAltitude = Altitude;
                     cnt++;
                 }
-                if ((Altitude - tempAltitude) >= 0.3) {
+                if ((Altitude - tempAltitude) >= 2) {
                     tempAltitude = Altitude;
                     upAltitude=upAltitude+2;
                 }
-                if ((Altitude - tempAltitude) <= -0.3) {
+                if ((Altitude - tempAltitude) <= -2) {
                     tempAltitude = Altitude;
                     downAltitude=downAltitude+2;
                 }
