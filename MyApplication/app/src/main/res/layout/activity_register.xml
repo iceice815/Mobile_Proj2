@@ -10,7 +10,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/register_background"
+        android:src="@drawable/picture2"
         android:layout_above="@+id/Username"
         android:layout_centerHorizontal="true" />
     <ProgressBar

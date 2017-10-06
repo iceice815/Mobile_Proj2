@@ -11,7 +11,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/elder_login"
+        android:src="@drawable/picture2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -29,8 +29,6 @@
         android:id="@+id/UserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Please input your username..."
-        android:textColorHint="#874423"
         android:layout_below="@+id/LoginView"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/textView2" />
@@ -50,9 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="49dp"
-        android:hint="please input your password..."
         android:inputType="textPassword"
-        android:textColorHint="#874423"
         android:layout_below="@+id/LoginView"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/textView" />
